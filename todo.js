@@ -27,6 +27,14 @@ const main = () => {
 
   saveButton.onclick = () => {
     takeTask(createTask);
+
+    const tasks = document.querySelectorAll("li");
+    tasks.forEach((task) => {
+      task.onclick = () => {
+        task.style.color = "white";
+        task.style.backgroundColor = "green";
+      };
+    });
   };
 };
 
