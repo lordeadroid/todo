@@ -1,36 +1,32 @@
-const resetInputBoxValue = (element) => {
+const resetTaskBoxValue = (element) => {
   element.value = "";
 };
 
-const createTasks = (tasks) => {
-  const taskElements = tasks.map((task) => {
-    const li = document.createElement("li");
-    li.innerText = task;
-    return li;
-  });
-  appendElements(taskElements);
+const createTask = (task) => {
+  const taskElement = document.createElement("li");
+  taskElement.innerText = task;
+
+  appendElement(taskElement);
 };
 
-const appendElements = (taskElements) => {
+const appendElement = (taskElement) => {
   const page = document.querySelector(".page");
 
-  taskElements.forEach((element) => {
-    page.appendChild(element);
-  });
+  page.appendChild(taskElement);
 };
 
 const takeTask = (cb) => {
   const taskElement = document.querySelector("#task-box");
   const task = taskElement.value;
-  resetInputBoxValue(taskElement);
-  cb([task]);
+  resetTaskBoxValue(taskElement);
+  cb(task);
 };
 
 const main = () => {
   const saveButton = document.querySelector("#save-button");
 
   saveButton.onclick = () => {
-    takeTask(createTasks);
+    takeTask(createTask);
   };
 };
 
