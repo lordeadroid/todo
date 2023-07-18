@@ -1,9 +1,14 @@
+const resetInputBoxValue = (element) => {
+  element.value = "";
+};
+
 const createTasks = (tasks) => {
-  return tasks.map((task) => {
+  const taskElements = tasks.map((task) => {
     const li = document.createElement("li");
     li.innerText = task;
     return li;
   });
+  appendElements(taskElements);
 };
 
 const appendElements = (taskElements) => {
@@ -14,17 +19,19 @@ const appendElements = (taskElements) => {
   });
 };
 
+const takeTask = (cb) => {
+  const taskElement = document.querySelector("#task-box");
+  const task = taskElement.value;
+  resetInputBoxValue(taskElement);
+  cb([task]);
+};
+
 const main = () => {
-  const tasks = [
-    "Buy eggs from supermarket.eet",
-    "Finish Code Of Conduct training on campus.eet",
-    "Finish day 15 part 2 of Advent of Code problem.eet",
-    "Fill timesheeet",
-  ];
+  const saveButton = document.querySelector("#save-button");
 
-  const taskElements = createTasks(tasks);
-
-  appendElements(taskElements);
+  saveButton.onclick = () => {
+    takeTask(createTasks);
+  };
 };
 
 window.onload = main;
