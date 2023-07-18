@@ -22,14 +22,24 @@ const takeTask = (cb) => {
   cb(task);
 };
 
+const markUndo = () => {
+  const tasks = document.querySelectorAll(".done");
+  console.log(tasks);
+  tasks.forEach((task) => {
+    task.onclick = () => {
+      task.classList.remove("done");
+    };
+  });
+};
+
 const markCompleteTask = () => {
   const tasks = document.querySelectorAll("li");
   tasks.forEach((task) => {
     task.onclick = () => {
-      task.style.color = "white";
-      task.style.backgroundColor = "green";
+      task.classList.add("done");
     };
   });
+  markUndo();
 };
 
 const main = () => {
