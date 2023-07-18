@@ -22,19 +22,22 @@ const takeTask = (cb) => {
   cb(task);
 };
 
+const markCompleteTask = () => {
+  const tasks = document.querySelectorAll("li");
+  tasks.forEach((task) => {
+    task.onclick = () => {
+      task.style.color = "white";
+      task.style.backgroundColor = "green";
+    };
+  });
+};
+
 const main = () => {
   const saveButton = document.querySelector("#save-button");
 
   saveButton.onclick = () => {
     takeTask(createTask);
-
-    const tasks = document.querySelectorAll("li");
-    tasks.forEach((task) => {
-      task.onclick = () => {
-        task.style.color = "white";
-        task.style.backgroundColor = "green";
-      };
-    });
+    markCompleteTask();
   };
 };
 
