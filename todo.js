@@ -49,7 +49,7 @@ class TodoViewer {
     this.#todoList = todoList;
   }
 
-  get render() {
+  render() {
     this.#removeTasks();
 
     const tasks = this.#todoList.allTodos;
@@ -86,16 +86,16 @@ const readTask = (taskBox) => {
   return task;
 };
 
-class GenerateId {
-  #idNumber;
+class Id {
+  #number;
 
   constructor() {
-    this.#idNumber = 0;
+    this.#number = 0;
   }
 
   get number() {
-    this.#idNumber += 1;
-    return this.#idNumber;
+    this.#number += 1;
+    return this.#number;
   }
 }
 
@@ -103,15 +103,15 @@ const main = () => {
   const taskBox = document.querySelector("#task-box");
   const saveButton = document.querySelector("#save-button");
   const todoList = new TodoList();
-  const generateId = new GenerateId();
+  const id = new Id();
 
   saveButton.onclick = () => {
     const task = readTask(taskBox);
-    const todo = new Todo(generateId.number, task);
+    const todo = new Todo(id.number, task);
     todoList.add(todo);
 
     const todoViewer = new TodoViewer(todoList);
-    todoViewer.render;
+    todoViewer.render();
   };
 };
 
