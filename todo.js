@@ -1,13 +1,46 @@
-const renderTask = (taskElement) => {
-  const page = document.querySelector("#tasks");
-  page.appendChild(taskElement);
-};
+class Todo {
+  #id;
+  #isDone;
+  #description;
 
-const createTaskElement = (task) => {
-  const taskElement = document.createElement("li");
-  taskElement.innerText = task;
-  return taskElement;
-};
+  constructor(id, description) {
+    this.#id = id;
+    this.#isDone = false;
+    this.#description = description;
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  get status() {
+    return this.#isDone;
+  }
+
+  get description() {
+    return this.#description;
+  }
+
+  toggleStatus() {
+    this.#isDone = !this.status;
+  }
+}
+
+class TodoList {
+  #todos;
+
+  constructor() {
+    this.#todos = [];
+  }
+
+  add(todo) {
+    this.#todos.push(todo);
+  }
+
+  get allTodos() {
+    return this.#todos;
+  }
+}
 
 const readTask = (taskBox) => {
   const task = taskBox.value;
@@ -18,11 +51,14 @@ const readTask = (taskBox) => {
 const main = () => {
   const taskBox = document.querySelector("#task-box");
   const saveButton = document.querySelector("#save-button");
+  const todoList = new TodoList();
+
+  const id = 0;
 
   saveButton.onclick = () => {
     const task = readTask(taskBox);
-    const taskElement = createTaskElement(task);
-    renderTask(taskElement);
+    const todo = new Todo(id, task);
+    todoList.add(todo);
   };
 };
 
