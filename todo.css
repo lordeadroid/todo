@@ -35,3 +35,8 @@ h1 {
 #tasks {
   font-size: 4em;
 }
+
+li {
+  margin-left: 20px;
+  font-size: 3em;
+}

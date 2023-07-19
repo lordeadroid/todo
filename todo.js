@@ -1,42 +1,30 @@
-const resetTaskBoxValue = (element) => {
-  element.value = "";
-};
-
-const appendElement = (taskElement) => {
-  const page = document.querySelector(".page");
-
+const renderTask = (taskElement) => {
+  const page = document.querySelector("#page");
   page.appendChild(taskElement);
 };
 
-const createTask = (task) => {
+const createTaskElement = (task) => {
   const taskElement = document.createElement("li");
   taskElement.innerText = task;
 
-  appendElement(taskElement);
+  return taskElement;
 };
 
-const takeTask = (cb) => {
-  const taskElement = document.querySelector("#task-box");
-  const task = taskElement.value;
-  resetTaskBoxValue(taskElement);
-  cb(task);
-};
+const readTask = (taskBox) => {
+  const task = taskBox.value;
+  taskBox.value = "";
 
-const markCompletedTask = () => {
-  const tasks = document.querySelectorAll("li");
-  tasks.forEach((task) => {
-    task.onclick = () => {
-      task.classList.add("done");
-    };
-  });
+  return task;
 };
 
 const main = () => {
+  const taskBox = document.querySelector("#task-box");
   const saveButton = document.querySelector("#save-button");
 
   saveButton.onclick = () => {
-    takeTask(createTask);
-    markCompletedTask();
+    const task = readTask(taskBox);
+    const taskElement = createTaskElement(task);
+    renderTask(taskElement);
   };
 };
 
