@@ -1,19 +1,17 @@
 const renderTask = (taskElement) => {
-  const page = document.querySelector("#page");
+  const page = document.querySelector("#tasks");
   page.appendChild(taskElement);
 };
 
 const createTaskElement = (task) => {
   const taskElement = document.createElement("li");
   taskElement.innerText = task;
-
   return taskElement;
 };
 
 const readTask = (taskBox) => {
   const task = taskBox.value;
   taskBox.value = "";
-
   return task;
 };
 
