@@ -96,12 +96,14 @@ class TodoViewer {
 }
 
 class MouseController {
+  #tasks;
   #taskBox;
   #saveButton;
 
-  constructor(taskBox, saveButton) {
+  constructor(taskBox, saveButton, tasks) {
     this.#taskBox = taskBox;
     this.#saveButton = saveButton;
+    this.#tasks = tasks;
   }
 
   #readTask() {
@@ -116,26 +118,51 @@ class MouseController {
       cb(taskDescription);
     };
   }
+
+  onTasksClick(cb) {
+    this.#tasks.onclick = (event) => {
+      const elementId = event.target.id;
+      cb(elementId);
+    };
+  }
 }
 
 class TodoController {
   #inputController;
   #id;
+  #todoList;
 
-  constructor(inputController, id) {
+  constructor(inputController, id, todoList) {
     this.#inputController = inputController;
     this.#id = id;
+    this.#todoList = todoList;
   }
 
   #onNewTask(taskDescription) {
     const todo = new Todo(this.#id.number, taskDescription);
-    todoList.add(todo);
-    const todoViewer = new TodoViewer(todoList.allTodos, tasks);
+    this.#todoList.add(todo);
+    const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
+    todoViewer.render();
+  }
+
+  #onTasksClick(elementId) {
+    this.#todoList.allTodos.forEach((todo) => {
+      if (todo.id === elementId) {
+        todo.toggleStatus();
+      }
+    });
+    const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
     todoViewer.render();
   }
 
   start() {
-    this.#inputController.onSaveButton(this.#onNewTask);
+    this.#inputController.onSaveButton((taskDescription) =>
+      this.#onNewTask(taskDescription)
+    );
+
+    this.#inputController.onTasksClick((elementId) =>
+      this.#onTasksClick(elementId)
+    );
   }
 }
 
@@ -145,9 +172,10 @@ const main = () => {
   const saveButton = document.querySelector("#save-button");
 
   const id = new Id();
+  const todoList = new TodoList();
 
-  const inputController = new MouseController(taskBox, saveButton);
-  const todoController = new TodoController(inputController, id);
+  const inputController = new MouseController(taskBox, saveButton, tasks);
+  const todoController = new TodoController(inputController, id, todoList);
   todoController.start();
 };
 
