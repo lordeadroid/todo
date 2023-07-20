@@ -147,7 +147,7 @@ class MouseController {
   }
 
   onSortButton(cb) {
-    this.#sortButton.onclick = () => cb();
+    this.#sortButton.onclick = cb;
   }
 }
 
@@ -155,18 +155,19 @@ class TodoController {
   #inputController;
   #id;
   #todoList;
+  #todoViewer;
 
-  constructor(inputController, id, todoList) {
+  constructor(inputController, id, todoList, todoViewer) {
     this.#inputController = inputController;
     this.#id = id;
     this.#todoList = todoList;
+    this.#todoViewer = todoViewer;
   }
 
   #onNewTask(taskDescription) {
     const todo = new Todo(this.#id.number, taskDescription);
     this.#todoList.add(todo);
-    const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
-    todoViewer.render();
+    this.#display();
   }
 
   #onTasksClick(elementId) {
@@ -175,14 +176,12 @@ class TodoController {
         todo.toggleStatus();
       }
     });
-    const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
-    todoViewer.render();
+    this.#display();
   }
 
   #onSort() {
-    const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
-    todoViewer.toggleSort();
-    todoViewer.render();
+    this.#todoViewer.toggleSort();
+    this.#display();
   }
 
   start() {
@@ -196,6 +195,10 @@ class TodoController {
 
     this.#inputController.onSortButton(() => this.#onSort());
   }
+
+  #display() {
+    this.#todoViewer.render();
+  }
 }
 
 const main = () => {
@@ -206,6 +209,7 @@ const main = () => {
 
   const id = new Id();
   const todoList = new TodoList();
+  const todoViewer = new TodoViewer(todoList.allTodos, tasks);
 
   const inputController = new MouseController(
     taskBox,
@@ -213,7 +217,13 @@ const main = () => {
     tasks,
     sortButton
   );
-  const todoController = new TodoController(inputController, id, todoList);
+
+  const todoController = new TodoController(
+    inputController,
+    id,
+    todoList,
+    todoViewer
+  );
   todoController.start();
 };
 
