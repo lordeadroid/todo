@@ -40,3 +40,7 @@ h1 {
   text-align: center;
   font-size: 2.5em;
 }
+
+.done {
+  text-decoration: line-through;
+}

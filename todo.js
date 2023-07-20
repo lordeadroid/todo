@@ -1,3 +1,16 @@
+class Id {
+  #number;
+
+  constructor() {
+    this.#number = 0;
+  }
+
+  get number() {
+    this.#number += 1;
+    return `task-${this.#number}`;
+  }
+}
+
 class Todo {
   #id;
   #isDone;
@@ -44,75 +57,79 @@ class TodoList {
 
 class TodoViewer {
   #todoList;
+  #tasks;
 
-  constructor(todoList) {
+  constructor(todoList, tasks) {
     this.#todoList = todoList;
-  }
-
-  render() {
-    this.#removeTasks();
-
-    const tasks = this.#todoList.allTodos;
-    tasks.forEach((todo) => {
-      const taskElement = this.#createTaskElement(todo);
-      this.#renderTask(taskElement);
-    });
+    this.#tasks = tasks;
   }
 
   #removeTasks() {
-    const tasks = document.querySelector("#tasks");
-
-    while (tasks.hasChildNodes()) {
-      tasks.removeChild(tasks.firstChild);
+    while (this.#tasks.hasChildNodes()) {
+      this.#tasks.removeChild(this.#tasks.firstChild);
     }
   }
 
   #createTaskElement(todo) {
     const taskElement = document.createElement("li");
     taskElement.innerText = todo.description;
-    taskElement.setAttribute("id", `task-${todo.id}`);
+    taskElement.setAttribute("id", todo.id);
     return taskElement;
   }
 
   #renderTask(taskElement) {
-    const page = document.querySelector("#tasks");
-    page.appendChild(taskElement);
+    this.#tasks.appendChild(taskElement);
+  }
+
+  render() {
+    this.#removeTasks();
+
+    const tasks = this.#todoList;
+    tasks.forEach((todo) => {
+      const taskElement = this.#createTaskElement(todo);
+      if (todo.status) {
+        taskElement.classList.add("done");
+      }
+      this.#renderTask(taskElement);
+    });
   }
 }
 
-const readTask = (taskBox) => {
-  const task = taskBox.value;
-  taskBox.value = "";
-  return task;
-};
+class MouseController {
+  #taskBox;
+  #saveButton;
 
-class Id {
-  #number;
-
-  constructor() {
-    this.#number = 0;
+  constructor(taskBox, saveButton) {
+    this.#taskBox = taskBox;
+    this.#saveButton = saveButton;
   }
 
-  get number() {
-    this.#number += 1;
-    return this.#number;
+  onSaveButton(cb) {
+    this.#saveButton.onclick = () => {
+      const taskDescription = this.#taskBox.value;
+      this.#taskBox.value = "";
+      cb(taskDescription);
+    };
   }
 }
 
 const main = () => {
+  const tasks = document.querySelector("#tasks");
   const taskBox = document.querySelector("#task-box");
   const saveButton = document.querySelector("#save-button");
-  const todoList = new TodoList();
+
   const id = new Id();
+  const todoList = new TodoList();
 
-  saveButton.onclick = () => {
-    const task = readTask(taskBox);
-    const todo = new Todo(id.number, task);
+  const onNewTask = (taskDescription) => {
+    const todo = new Todo(id.number, taskDescription);
     todoList.add(todo);
-
-    const todoViewer = new TodoViewer(todoList);
+    const todoViewer = new TodoViewer(todoList.allTodos, tasks);
     todoViewer.render();
   };
+
+  const inputController = new MouseController(taskBox, saveButton);
+  inputController.onSaveButton(onNewTask);
 };
 
 window.onload = main;
