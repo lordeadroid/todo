@@ -1,5 +1,4 @@
 const alphabetically = (firstTask, secondTask) => {
-  console.log(firstTask.description[0]);
   return (
     firstTask.description[0].charCodeAt() -
     secondTask.description[0].charCodeAt()
@@ -66,10 +65,12 @@ class TodoList {
 class TodoViewer {
   #todoList;
   #tasks;
+  #sortAlphabetically;
 
   constructor(todoList, tasks) {
     this.#todoList = todoList;
     this.#tasks = tasks;
+    this.#sortAlphabetically = false;
   }
 
   #removeTasks() {
@@ -91,8 +92,9 @@ class TodoViewer {
 
   render() {
     this.#removeTasks();
+    let tasks = [...this.#todoList];
 
-    const tasks = this.#todoList;
+    if (this.#sortStatus()) tasks = [...this.#todoList].sort(alphabetically);
     tasks.forEach((todo) => {
       const taskElement = this.#createTaskElement(todo);
       if (todo.status) {
@@ -100,6 +102,14 @@ class TodoViewer {
       }
       this.#renderTask(taskElement);
     });
+  }
+
+  #sortStatus() {
+    return this.#sortAlphabetically;
+  }
+
+  toggleSort() {
+    this.#sortAlphabetically = !this.#sortStatus();
   }
 }
 
@@ -170,8 +180,8 @@ class TodoController {
   }
 
   #onSort() {
-    this.#todoList.allTodos.sort(alphabetically);
     const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
+    todoViewer.toggleSort();
     todoViewer.render();
   }
 
