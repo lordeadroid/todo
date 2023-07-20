@@ -104,12 +104,38 @@ class MouseController {
     this.#saveButton = saveButton;
   }
 
+  #readTask() {
+    const taskDescription = this.#taskBox.value;
+    this.#taskBox.value = "";
+    return taskDescription;
+  }
+
   onSaveButton(cb) {
     this.#saveButton.onclick = () => {
-      const taskDescription = this.#taskBox.value;
-      this.#taskBox.value = "";
+      const taskDescription = this.#readTask();
       cb(taskDescription);
     };
+  }
+}
+
+class TodoController {
+  #inputController;
+  #id;
+
+  constructor(inputController, id) {
+    this.#inputController = inputController;
+    this.#id = id;
+  }
+
+  #onNewTask(taskDescription) {
+    const todo = new Todo(this.#id.number, taskDescription);
+    todoList.add(todo);
+    const todoViewer = new TodoViewer(todoList.allTodos, tasks);
+    todoViewer.render();
+  }
+
+  start() {
+    this.#inputController.onSaveButton(this.#onNewTask);
   }
 }
 
@@ -119,17 +145,10 @@ const main = () => {
   const saveButton = document.querySelector("#save-button");
 
   const id = new Id();
-  const todoList = new TodoList();
-
-  const onNewTask = (taskDescription) => {
-    const todo = new Todo(id.number, taskDescription);
-    todoList.add(todo);
-    const todoViewer = new TodoViewer(todoList.allTodos, tasks);
-    todoViewer.render();
-  };
 
   const inputController = new MouseController(taskBox, saveButton);
-  inputController.onSaveButton(onNewTask);
+  const todoController = new TodoController(inputController, id);
+  todoController.start();
 };
 
 window.onload = main;
