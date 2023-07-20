@@ -108,13 +108,10 @@ class TodoViewer {
     this.#removeTasks();
 
     let tasks = [...this.#todoList];
-    console.log(tasks);
 
     if (this.#sortStatus()) tasks = tasks.sort(alphabetically);
-    console.log(tasks);
 
     if (this.#groupStatus()) tasks = this.#groupedTasks(tasks);
-    console.log(tasks);
 
     tasks.forEach((todo) => {
       const taskElement = this.#createTaskElement(todo);
