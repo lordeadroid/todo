@@ -1,3 +1,11 @@
+const alphabetically = (firstTask, secondTask) => {
+  console.log(firstTask.description[0]);
+  return (
+    firstTask.description[0].charCodeAt() -
+    secondTask.description[0].charCodeAt()
+  );
+};
+
 class Id {
   #number;
 
@@ -99,11 +107,13 @@ class MouseController {
   #tasks;
   #taskBox;
   #saveButton;
+  #sortButton;
 
-  constructor(taskBox, saveButton, tasks) {
+  constructor(taskBox, saveButton, tasks, sortButton) {
     this.#taskBox = taskBox;
     this.#saveButton = saveButton;
     this.#tasks = tasks;
+    this.#sortButton = sortButton;
   }
 
   #readTask() {
@@ -124,6 +134,10 @@ class MouseController {
       const elementId = event.target.id;
       cb(elementId);
     };
+  }
+
+  onSortButton(cb) {
+    this.#sortButton.onclick = () => cb();
   }
 }
 
@@ -155,6 +169,12 @@ class TodoController {
     todoViewer.render();
   }
 
+  #onSort() {
+    this.#todoList.allTodos.sort(alphabetically);
+    const todoViewer = new TodoViewer(this.#todoList.allTodos, tasks);
+    todoViewer.render();
+  }
+
   start() {
     this.#inputController.onSaveButton((taskDescription) =>
       this.#onNewTask(taskDescription)
@@ -163,6 +183,8 @@ class TodoController {
     this.#inputController.onTasksClick((elementId) =>
       this.#onTasksClick(elementId)
     );
+
+    this.#inputController.onSortButton(() => this.#onSort());
   }
 }
 
@@ -170,11 +192,17 @@ const main = () => {
   const tasks = document.querySelector("#tasks");
   const taskBox = document.querySelector("#task-box");
   const saveButton = document.querySelector("#save-button");
+  const sortButton = document.querySelector("#sort-button");
 
   const id = new Id();
   const todoList = new TodoList();
 
-  const inputController = new MouseController(taskBox, saveButton, tasks);
+  const inputController = new MouseController(
+    taskBox,
+    saveButton,
+    tasks,
+    sortButton
+  );
   const todoController = new TodoController(inputController, id, todoList);
   todoController.start();
 };
