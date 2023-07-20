@@ -135,7 +135,7 @@ class TodoViewer {
   }
 
   toggleGroupStatus() {
-    this.#sortAlphabetically = !this.#groupStatus();
+    this.#groupTasks = !this.#groupStatus();
   }
 }
 
