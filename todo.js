@@ -1,8 +1,5 @@
 const alphabetically = (firstTask, secondTask) => {
-  return (
-    firstTask.description[0].charCodeAt() -
-    secondTask.description[0].charCodeAt()
-  );
+  return firstTask.description > secondTask.description ? 1 : -1;
 };
 
 class Id {
@@ -104,24 +101,6 @@ class TodoViewer {
     return unCompletedTasks.concat(completedTasks);
   }
 
-  render() {
-    this.#removeTasks();
-
-    let tasks = [...this.#todoList];
-
-    if (this.#sortStatus()) tasks = tasks.sort(alphabetically);
-
-    if (this.#groupStatus()) tasks = this.#groupedTasks(tasks);
-
-    tasks.forEach((todo) => {
-      const taskElement = this.#createTaskElement(todo);
-      if (todo.status) {
-        taskElement.classList.add("done");
-      }
-      this.#renderTask(taskElement);
-    });
-  }
-
   #sortStatus() {
     return this.#sortAlphabetically;
   }
@@ -136,6 +115,23 @@ class TodoViewer {
 
   toggleGroupStatus() {
     this.#groupTasks = !this.#groupStatus();
+  }
+
+  render() {
+    this.#removeTasks();
+
+    let tasks = [...this.#todoList];
+
+    if (this.#sortStatus()) tasks = tasks.sort(alphabetically);
+    if (this.#groupStatus()) tasks = this.#groupedTasks(tasks);
+
+    tasks.forEach((todo) => {
+      const taskElement = this.#createTaskElement(todo);
+      if (todo.status) {
+        taskElement.classList.add("done");
+      }
+      this.#renderTask(taskElement);
+    });
   }
 }
 
@@ -240,12 +236,21 @@ class TodoController {
   }
 }
 
+const getButtonElements = () => {
+  const elements = [
+    "#tasks",
+    "#task-box",
+    "#save-button",
+    "#sort-button",
+    "#complete-button",
+  ];
+
+  return elements.map((element) => document.querySelector(element));
+};
+
 const main = () => {
-  const tasks = document.querySelector("#tasks");
-  const taskBox = document.querySelector("#task-box");
-  const saveButton = document.querySelector("#save-button");
-  const sortButton = document.querySelector("#sort-button");
-  const groupButton = document.querySelector("#completed-tasks");
+  const [tasks, taskBox, saveButton, sortButton, completeButton] =
+    getButtonElements();
 
   const id = new Id();
   const todoList = new TodoList();
@@ -256,7 +261,7 @@ const main = () => {
     saveButton,
     tasks,
     sortButton,
-    groupButton
+    completeButton
   );
 
   const todoController = new TodoController(
