@@ -18,9 +18,9 @@ class TodoController {
 
   #displayTodos() {
     let todos = this.#todoList.allTodos;
+
     if (this.#sort.alphabetically) todos = this.#todoList.sortedTodos;
     if (this.#sort.byGroup) todos = this.#todoList.sortedCompletedTodos;
-
     this.#todoView.render(todos);
   }
 
@@ -56,6 +56,11 @@ class TodoController {
 
     this.#todoView.setupToggleListener((todo) => {
       todo.toggleStatus();
+      this.#displayTodos();
+    });
+
+    this.#todoView.setupRemoveTodoListener((todo) => {
+      todo.delete();
       this.#displayTodos();
     });
   }

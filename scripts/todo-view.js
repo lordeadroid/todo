@@ -1,6 +1,7 @@
 class TodoView {
   #tasksElements;
   #changeTodoStatus;
+  #removeTodo;
 
   constructor() {
     this.#tasksElements = document.getElementById("tasks");
@@ -10,6 +11,18 @@ class TodoView {
     while (this.#tasksElements.hasChildNodes()) {
       this.#tasksElements.removeChild(this.#tasksElements.firstChild);
     }
+  }
+
+  #createDeleteButton(todo) {
+    const deleteButton = document.createElement("input");
+    deleteButton.type = "button";
+    deleteButton.value = "delete";
+    deleteButton.id = todo;
+    deleteButton.onclick = () => {
+      this.#removeTodo(todo);
+    };
+
+    return deleteButton;
   }
 
   #createTodoElement(todo) {
@@ -27,17 +40,25 @@ class TodoView {
     this.#removeTodos();
 
     todos.forEach((todo) => {
-      const todoElement = this.#createTodoElement(todo);
+      if (todo.isAlive) {
+        const todoElement = this.#createTodoElement(todo);
+        const deleteButton = this.#createDeleteButton(todo);
 
-      if (todo.isDone) {
-        todoElement.classList.add("done");
+        if (todo.isDone) {
+          todoElement.classList.add("done");
+        }
+
+        todoElement.appendChild(deleteButton);
+        this.#tasksElements.appendChild(todoElement);
       }
-
-      this.#tasksElements.appendChild(todoElement);
     });
   }
 
   setupToggleListener(changeTodoStatus) {
     this.#changeTodoStatus = changeTodoStatus;
+  }
+
+  setupRemoveTodoListener(removeTodo) {
+    this.#removeTodo = removeTodo;
   }
 }

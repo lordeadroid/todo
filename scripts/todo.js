@@ -18,12 +18,14 @@ class IdGenerator {
 class Todo {
   #id;
   #isDone;
+  #isAlive;
   #description;
 
   constructor(id, description) {
     this.#id = id;
     this.#description = description;
     this.#isDone = false;
+    this.#isAlive = true;
   }
 
   get id() {
@@ -36,6 +38,14 @@ class Todo {
 
   get description() {
     return this.#description;
+  }
+
+  get isAlive() {
+    return this.#isAlive;
+  }
+
+  delete() {
+    this.#isAlive = false;
   }
 
   toggleStatus() {
