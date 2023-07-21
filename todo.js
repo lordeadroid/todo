@@ -1,15 +1,11 @@
-const alphabetically = (firstTask, secondTask) => {
-  return firstTask.description > secondTask.description ? 1 : -1;
-};
-
-class Id {
+class TodoId {
   #number;
 
   constructor() {
     this.#number = 0;
   }
 
-  get number() {
+  get value() {
     this.#number += 1;
     return `task-${this.#number}`;
   }
@@ -39,7 +35,7 @@ class Todo {
   }
 
   toggleStatus() {
-    this.#isDone = !this.status;
+    this.#isDone = !this.#isDone;
   }
 }
 
@@ -59,7 +55,7 @@ class TodoList {
   }
 }
 
-class TodoViewer {
+class TodoView {
   #todoList;
   #tasks;
   #sortAlphabetically;
@@ -106,7 +102,7 @@ class TodoViewer {
   }
 
   toggleSort() {
-    this.#sortAlphabetically = !this.#sortStatus();
+    this.#sortAlphabetically = !this.#sortAlphabetically;
   }
 
   #groupStatus() {
@@ -114,7 +110,7 @@ class TodoViewer {
   }
 
   toggleGroupStatus() {
-    this.#groupTasks = !this.#groupStatus();
+    this.#groupTasks = !this.#groupTasks;
   }
 
   render() {
@@ -122,7 +118,11 @@ class TodoViewer {
 
     let tasks = [...this.#todoList];
 
-    if (this.#sortStatus()) tasks = tasks.sort(alphabetically);
+    if (this.#sortStatus())
+      tasks = tasks.sort((firstTask, secondTask) => {
+        return firstTask.description > secondTask.description ? 1 : -1;
+      });
+
     if (this.#groupStatus()) tasks = this.#groupedTasks(tasks);
 
     tasks.forEach((todo) => {
@@ -163,7 +163,7 @@ class MouseController {
     };
   }
 
-  onTasksClick(cb) {
+  onTaskClick(cb) {
     this.#tasks.onclick = (event) => {
       const elementId = event.target.id;
       cb(elementId);
@@ -183,26 +183,26 @@ class TodoController {
   #inputController;
   #id;
   #todoList;
-  #todoViewer;
+  #todoView;
 
-  constructor(inputController, id, todoList, todoViewer) {
+  constructor(inputController, id, todoList, todoView) {
     this.#inputController = inputController;
     this.#id = id;
     this.#todoList = todoList;
-    this.#todoViewer = todoViewer;
+    this.#todoView = todoView;
   }
 
   #display() {
-    this.#todoViewer.render();
+    this.#todoView.render();
   }
 
-  #onNewTask(taskDescription) {
-    const todo = new Todo(this.#id.number, taskDescription);
+  #createNewTask(taskDescription) {
+    const todo = new Todo(this.#id.value, taskDescription);
     this.#todoList.add(todo);
     this.#display();
   }
 
-  #onTasksClick(elementId) {
+  #markTask(elementId) {
     this.#todoList.allTodos.forEach((todo) => {
       if (todo.id === elementId) {
         todo.toggleStatus();
@@ -211,50 +211,44 @@ class TodoController {
     this.#display();
   }
 
-  #onSort() {
-    this.#todoViewer.toggleSort();
+  #sortList() {
+    this.#todoView.toggleSort();
     this.#display();
   }
 
-  #onGroup() {
-    this.#todoViewer.toggleGroupStatus();
+  #groupCompletedTasks() {
+    this.#todoView.toggleGroupStatus();
     this.#display();
   }
 
   start() {
     this.#inputController.onSaveButton((taskDescription) =>
-      this.#onNewTask(taskDescription)
+      this.#createNewTask(taskDescription)
     );
-
-    this.#inputController.onTasksClick((elementId) =>
-      this.#onTasksClick(elementId)
-    );
-
-    this.#inputController.onSortButton(() => this.#onSort());
-
-    this.#inputController.onGroupSort(() => this.#onGroup());
+    this.#inputController.onTaskClick((elementId) => this.#markTask(elementId));
+    this.#inputController.onSortButton(() => this.#sortList());
+    this.#inputController.onGroupSort(() => this.#groupCompletedTasks());
   }
 }
 
-const getButtonElements = () => {
-  const elements = [
-    "#tasks",
-    "#task-box",
-    "#save-button",
-    "#sort-button",
-    "#complete-button",
-  ];
-
-  return elements.map((element) => document.querySelector(element));
+const getPageElements = (elementsName) => {
+  return elements.map((element) => document.getElementById(element));
 };
 
 const main = () => {
+  const elementsName = [
+    "tasks",
+    "task-box",
+    "save-button",
+    "sort-button",
+    "complete-button",
+  ];
   const [tasks, taskBox, saveButton, sortButton, completeButton] =
-    getButtonElements();
+    getPageElements(elementsName);
 
-  const id = new Id();
+  const id = new TodoId();
   const todoList = new TodoList();
-  const todoViewer = new TodoViewer(todoList.allTodos, tasks);
+  const todoView = new TodoView(todoList.allTodos, tasks);
 
   const inputController = new MouseController(
     taskBox,
@@ -268,7 +262,7 @@ const main = () => {
     inputController,
     id,
     todoList,
-    todoViewer
+    todoView
   );
   todoController.start();
 };
