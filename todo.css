@@ -29,13 +29,13 @@ h1 {
 
 .buttons {
   height: 50px;
-  width: 100px;
+  width: 110px;
   font-size: 2em;
 }
 
 #tasks {
   font-size: 2.5em;
-  width: 1100px;
+  width: 1110px;
   margin: 0 auto;
   padding-left: 20px;
 }

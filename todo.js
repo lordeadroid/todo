@@ -18,8 +18,8 @@ class Todo {
 
   constructor(id, description) {
     this.#id = id;
-    this.#isDone = false;
     this.#description = description;
+    this.#isDone = false;
   }
 
   get id() {
@@ -51,86 +51,64 @@ class TodoList {
   }
 
   get allTodos() {
-    return this.#todos;
+    return [...this.#todos];
+  }
+
+  get sortedTodos() {
+    const todos = this.allTodos;
+
+    return todos.sort((firstTodo, secondTodo) => {
+      return firstTodo.description > secondTodo.description ? 1 : -1;
+    });
+  }
+
+  get completedTodos() {
+    const todos = this.allTodos;
+    const completedTodos = [];
+    const unCompletedTodos = [];
+
+    todos.forEach((todo) => {
+      if (todo.status) completedTodos.push(todo);
+      else unCompletedTodos.push(todo);
+    });
+
+    return unCompletedTodos.concat(completedTodos);
   }
 }
 
 class TodoView {
-  #todoList;
-  #tasks;
-  #sortAlphabetically;
-  #groupTasks;
+  #tasksElements;
 
-  constructor(todoList, tasks) {
-    this.#todoList = todoList;
-    this.#tasks = tasks;
-    this.#sortAlphabetically = false;
-    this.#groupTasks = false;
+  constructor(tasksElements) {
+    this.#tasksElements = tasksElements;
   }
 
-  #removeTasks() {
-    while (this.#tasks.hasChildNodes()) {
-      this.#tasks.removeChild(this.#tasks.firstChild);
+  #removeTodos() {
+    while (this.#tasksElements.hasChildNodes()) {
+      this.#tasksElements.removeChild(this.#tasksElements.firstChild);
     }
   }
 
-  #createTaskElement(todo) {
-    const taskElement = document.createElement("li");
-    taskElement.innerText = todo.description;
-    taskElement.setAttribute("id", todo.id);
-    return taskElement;
+  #createElement(todo) {
+    const todoElement = document.createElement("li");
+    todoElement.id = todo.id;
+    todoElement.innerText = todo.description;
+    return todoElement;
   }
 
-  #renderTask(taskElement) {
-    this.#tasks.appendChild(taskElement);
+  #renderTodo(element) {
+    this.#tasksElements.appendChild(element);
   }
 
-  #groupedTasks(tasks) {
-    const completedTasks = [];
-    const unCompletedTasks = [];
+  render(todos) {
+    this.#removeTodos();
 
-    tasks.forEach((task) => {
-      if (task.status) completedTasks.push(task);
-      else unCompletedTasks.push(task);
-    });
-
-    return unCompletedTasks.concat(completedTasks);
-  }
-
-  #sortStatus() {
-    return this.#sortAlphabetically;
-  }
-
-  toggleSort() {
-    this.#sortAlphabetically = !this.#sortAlphabetically;
-  }
-
-  #groupStatus() {
-    return this.#groupTasks;
-  }
-
-  toggleGroupStatus() {
-    this.#groupTasks = !this.#groupTasks;
-  }
-
-  render() {
-    this.#removeTasks();
-
-    let tasks = [...this.#todoList];
-
-    if (this.#sortStatus())
-      tasks = tasks.sort((firstTask, secondTask) => {
-        return firstTask.description > secondTask.description ? 1 : -1;
-      });
-
-    if (this.#groupStatus()) tasks = this.#groupedTasks(tasks);
-
-    tasks.forEach((todo) => {
-      const taskElement = this.#createTaskElement(todo);
+    todos.forEach((todo) => {
+      const todoElement = this.#createElement(todo);
       if (todo.status) {
-        taskElement.classList.add("done");
+        todoElement.classList.add("done");
       }
-      this.#renderTask(taskElement);
+      this.#renderTodo(todoElement);
     });
   }
 }
@@ -150,60 +128,73 @@ class MouseController {
     this.#groupButton = groupButton;
   }
 
-  #readTask() {
+  #readTodo() {
     const taskDescription = this.#taskBox.value;
     this.#taskBox.value = "";
     return taskDescription;
   }
 
-  onSaveButton(cb) {
+  onSaveButton(createNewTodo) {
     this.#saveButton.onclick = () => {
-      const taskDescription = this.#readTask();
-      cb(taskDescription);
+      const todoDescription = this.#readTodo();
+      createNewTodo(todoDescription);
     };
   }
 
-  onTaskClick(cb) {
+  onTodoClick(markTodo) {
     this.#tasks.onclick = (event) => {
       const elementId = event.target.id;
-      cb(elementId);
+      markTodo(elementId);
     };
   }
 
-  onSortButton(cb) {
-    this.#sortButton.onclick = cb;
+  onSortButtonClick(toggleSortAlpgabetically) {
+    this.#sortButton.onclick = toggleSortAlpgabetically;
   }
 
-  onGroupSort(cb) {
-    this.#groupButton.onclick = cb;
+  onGroupSort(toggleGroupSort) {
+    this.#groupButton.onclick = toggleGroupSort;
   }
 }
 
 class TodoController {
-  #inputController;
   #id;
+  #sort;
+  #todos;
   #todoList;
   #todoView;
+  #inputController;
 
   constructor(inputController, id, todoList, todoView) {
-    this.#inputController = inputController;
     this.#id = id;
     this.#todoList = todoList;
     this.#todoView = todoView;
+    this.#inputController = inputController;
+    this.#todos = [];
+    this.#sort = {
+      alphabetically: false,
+      byGroup: false,
+    };
   }
 
   #display() {
-    this.#todoView.render();
+    this.#todos = this.#todoList.allTodos;
+    if (this.#sort.alphabetically) this.#todos = this.#todoList.sortedTodos;
+    if (this.#sort.byGroup) this.#todos = this.#todoList.completedTodos;
+    this.#todoView.render(this.#todos);
   }
 
-  #createNewTask(taskDescription) {
-    const todo = new Todo(this.#id.value, taskDescription);
+  #createNewTodo(todoDescription) {
+    const todo = new Todo(this.#id.value, todoDescription);
     this.#todoList.add(todo);
+
     this.#display();
   }
 
-  #markTask(elementId) {
-    this.#todoList.allTodos.forEach((todo) => {
+  #markTodo(elementId) {
+    const todos = this.#todoList.allTodos;
+
+    todos.forEach((todo) => {
       if (todo.id === elementId) {
         todo.toggleStatus();
       }
@@ -211,28 +202,30 @@ class TodoController {
     this.#display();
   }
 
-  #sortList() {
-    this.#todoView.toggleSort();
+  #toggleSortAlphabetically() {
+    this.#sort.alphabetically = !this.#sort.alphabetically;
     this.#display();
   }
 
-  #groupCompletedTasks() {
-    this.#todoView.toggleGroupStatus();
+  #toggleGroupSort() {
+    this.#sort.byGroup = !this.#sort.byGroup;
     this.#display();
   }
 
   start() {
-    this.#inputController.onSaveButton((taskDescription) =>
-      this.#createNewTask(taskDescription)
+    this.#inputController.onSaveButton((todoDescription) =>
+      this.#createNewTodo(todoDescription)
     );
-    this.#inputController.onTaskClick((elementId) => this.#markTask(elementId));
-    this.#inputController.onSortButton(() => this.#sortList());
-    this.#inputController.onGroupSort(() => this.#groupCompletedTasks());
+    this.#inputController.onTodoClick((elementId) => this.#markTodo(elementId));
+    this.#inputController.onSortButtonClick(() =>
+      this.#toggleSortAlphabetically()
+    );
+    this.#inputController.onGroupSort(() => this.#toggleGroupSort());
   }
 }
 
 const getPageElements = (elementsName) => {
-  return elements.map((element) => document.getElementById(element));
+  return elementsName.map((element) => document.getElementById(element));
 };
 
 const main = () => {
@@ -243,17 +236,17 @@ const main = () => {
     "sort-button",
     "complete-button",
   ];
-  const [tasks, taskBox, saveButton, sortButton, completeButton] =
+  const [tasksElements, taskBox, saveButton, sortButton, completeButton] =
     getPageElements(elementsName);
 
   const id = new TodoId();
   const todoList = new TodoList();
-  const todoView = new TodoView(todoList.allTodos, tasks);
+  const todoView = new TodoView(tasksElements);
 
   const inputController = new MouseController(
     taskBox,
     saveButton,
-    tasks,
+    tasksElements,
     sortButton,
     completeButton
   );
