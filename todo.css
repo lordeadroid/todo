@@ -43,3 +43,20 @@ h1 {
 .done {
   text-decoration: line-through;
 }
+
+.todos {
+  height: 100px;
+  color: teal;
+  display: flex;
+  justify-content: space-between;
+}
+
+.todos:hover {
+  cursor: pointer;
+}
+
+.delete-button {
+  width: 100px;
+  height: 30px;
+  border-radius: 10px;
+}

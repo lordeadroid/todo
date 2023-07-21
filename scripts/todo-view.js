@@ -18,6 +18,8 @@ class TodoView {
     deleteButton.type = "button";
     deleteButton.value = "delete";
     deleteButton.id = todo;
+    deleteButton.classList = "delete-button";
+
     deleteButton.onclick = () => {
       this.#removeTodo(todo);
     };
@@ -27,8 +29,10 @@ class TodoView {
 
   #createTodoElement(todo) {
     const todoElement = document.createElement("div");
+    todoElement.classList = "todos";
     todoElement.id = todo.id;
     todoElement.innerText = todo.description;
+
     todoElement.onclick = () => {
       this.#changeTodoStatus(todo);
     };
