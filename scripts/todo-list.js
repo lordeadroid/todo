@@ -32,4 +32,12 @@ class TodoList {
 
     return unCompletedTodos.concat(completedTodos);
   }
+
+  delete(todo) {
+    const todoIndex = this.#todos.findIndex(
+      (element) => element.id === todo.id
+    );
+
+    this.#todos.splice(todoIndex, 1);
+  }
 }

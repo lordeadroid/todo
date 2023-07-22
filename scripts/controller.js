@@ -60,7 +60,7 @@ class TodoController {
     });
 
     this.#todoView.setupRemoveTodoListener((todo) => {
-      todo.delete();
+      this.#todoList.delete(todo);
       this.#displayTodos();
     });
   }

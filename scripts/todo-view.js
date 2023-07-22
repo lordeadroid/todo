@@ -44,17 +44,15 @@ class TodoView {
     this.#removeTodos();
 
     todos.forEach((todo) => {
-      if (todo.isAlive) {
-        const todoElement = this.#createTodoElement(todo);
-        const deleteButton = this.#createDeleteButton(todo);
+      const todoElement = this.#createTodoElement(todo);
+      const deleteButton = this.#createDeleteButton(todo);
 
-        if (todo.isDone) {
-          todoElement.classList.add("done");
-        }
-
-        todoElement.appendChild(deleteButton);
-        this.#tasksElements.appendChild(todoElement);
+      if (todo.isDone) {
+        todoElement.classList.add("done");
       }
+
+      todoElement.appendChild(deleteButton);
+      this.#tasksElements.appendChild(todoElement);
     });
   }
 
