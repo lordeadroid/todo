@@ -6,7 +6,7 @@
     <script src="scripts/todo-list.js"></script>
     <script src="scripts/todo-view.js"></script>
     <script src="scripts/controller.js"></script>
-    <script src="scripts/mouse-controller.js"></script>
+    <script src="scripts/input-controller.js"></script>
     <script src="main.js"></script>
   </head>
 
@@ -15,27 +15,15 @@
       <header>
         <h1>Todo</h1>
       </header>
-      <section id="task-title">
-        <input type="text" id="add-title" placeholder="Enter New Task List" />
-        <input type="button" value="Add" id="add-title-button" />
-      </section>
-      <section id="input-section">
-        <input type="text" id="task-box" placeholder="Enter New Task" />
+      <section>
+        <input type="text" id="add-list-box" placeholder="Add New Task List" />
         <input
           type="button"
           value="Add"
-          id="save-button"
-          class="buttons"
-        />
-        <input type="button" value="Sort" id="sort-button" class="buttons" />
-        <input
-          type="button"
-          value="Done Tasks"
-          id="complete-button"
+          id="add-list-button"
           class="buttons"
         />
       </section>
-      <div id="tasks"></div>
     </main>
   </body>
 </html>

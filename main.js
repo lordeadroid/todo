@@ -1,42 +1,23 @@
 const getElements = (elementsName) => {
-  return elementsName.map((element) => document.getElementById(element));
+  return elementsName.map((element) => {
+    return document.getElementById(element);
+  });
 };
 
 const main = () => {
-  const elementsName = [
-    "task-box",
-    "save-button",
-    "sort-button",
-    "complete-button",
-    "add-title-button",
-    "add-title",
-  ];
+  const elementsName = ["add-list-box", "add-list-button"];
+  const [addListBox, addListButton] = getElements(elementsName);
 
-  const [
-    taskBox,
-    submitButton,
-    sortButton,
-    completeButton,
-    titleButton,
-    titleBox,
-  ] = getElements(elementsName);
-
-  const id = new IdGenerator();
+  const todoId = new IdGenerator("todo");
+  const listId = new IdGenerator("list");
   const todoList = new TodoList();
   const todoView = new TodoView();
 
-  const inputController = new MouseController(
-    taskBox,
-    submitButton,
-    sortButton,
-    completeButton,
-    titleButton,
-    titleBox
-  );
-
+  const inputController = new InputController(addListBox, addListButton);
   const todoController = new TodoController(
     inputController,
-    id,
+    todoId,
+    listId,
     todoList,
     todoView
   );

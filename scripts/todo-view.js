@@ -129,18 +129,26 @@ class TodoView {
     return doneButton;
   }
 
-  createNewList(title, listId = "list-1") {
+  #createListNameElement(listName) {
+    const listNameElement = document.createElement("h2");
+    listNameElement.innerText = listName;
+
+    return listNameElement;
+  }
+
+  renderList(listName, listId) {
+    const listNameElement = this.#createListNameElement(listName);
     const list = document.createElement("section");
     const taskBox = this.#createTaskBox(listId);
     const addTaskButton = this.#createAddTaskButton(listId);
     const sortButton = this.#createSortButton(listId);
     const doneButton = this.#createDoneButton(listId);
 
+    list.appendChild(listNameElement);
     list.appendChild(taskBox);
     list.appendChild(addTaskButton);
     list.appendChild(sortButton);
     list.appendChild(doneButton);
-    list.appendChild(tasks);
 
     this.#page.appendChild(list);
   }

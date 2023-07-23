@@ -22,23 +22,10 @@ h1 {
   margin-bottom: 100px;
 }
 
-#task-box {
-  height: 50px;
-  width: 800px;
-  font-size: 2em;
-}
-
 .buttons {
   height: 50px;
   width: 110px;
   font-size: 2em;
-}
-
-#tasks {
-  font-size: 2.5em;
-  width: 1110px;
-  margin: 0 auto;
-  padding-left: 20px;
 }
 
 .done {

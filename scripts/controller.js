@@ -1,16 +1,18 @@
 class TodoController {
   #inputController;
-  #id;
+  #todoId;
+  #listId;
   #todoList;
   #todoView;
-  #sort;
+  #sortPreference;
 
-  constructor(inputController, id, todoList, todoView) {
+  constructor(inputController, todoId, listId, todoList, todoView) {
     this.#inputController = inputController;
-    this.#id = id;
+    this.#todoId = todoId;
+    this.#listId = listId;
     this.#todoList = todoList;
     this.#todoView = todoView;
-    this.#sort = {
+    this.#sortPreference = {
       alphabetically: false,
       byGroup: false,
     };
@@ -19,58 +21,48 @@ class TodoController {
   #displayTodos() {
     let todos = this.#todoList.allTodos;
 
-    if (this.#sort.alphabetically) todos = this.#todoList.sortedTodos;
-    if (this.#sort.byGroup) todos = this.#todoList.sortedCompletedTodos;
+    if (this.#sortPreference.alphabetically) todos = this.#todoList.sortedTodos;
+    if (this.#sortPreference.byGroup)
+      todos = this.#todoList.sortedCompletedTodos;
     this.#todoView.render(todos);
   }
 
   #createNewTodo(todoDescription) {
-    const todo = new Todo(this.#id.generate(), todoDescription);
+    const todo = new Todo(this.#todoId.generate(), todoDescription);
     this.#todoList.add(todo);
 
     this.#displayTodos();
   }
 
   #toggleSortAlphabetically() {
-    this.#sort.alphabetically = !this.#sort.alphabetically;
+    this.#sortPreference.alphabetically = !this.#sortPreference.alphabetically;
 
     this.#displayTodos();
   }
 
   #toggleGroupSort() {
-    this.#sort.byGroup = !this.#sort.byGroup;
+    this.#sortPreference.byGroup = !this.#sortPreference.byGroup;
 
     this.#displayTodos();
   }
 
-  #createNewList(title) {
-    this.#todoView.createNewList(title);
-    this.#displayTodos();
+  #createList(listName) {
+    this.#todoView.renderList(listName, this.#listId.generate());
   }
 
   start() {
-    this.#inputController.onSaveButtonClick((todoDescription) =>
-      this.#createNewTodo(todoDescription)
-    );
-
-    this.#inputController.onSortButtonClick(() =>
-      this.#toggleSortAlphabetically()
-    );
-
-    this.#inputController.onGroupSort(() => this.#toggleGroupSort());
-
-    this.#todoView.setupToggleListener((todo) => {
-      todo.toggleStatus();
-      this.#displayTodos();
+    this.#inputController.onAddListClick((listName) => {
+      this.#createList(listName);
     });
 
-    this.#todoView.setupRemoveTodoListener((todo) => {
-      this.#todoList.delete(todo);
-      this.#displayTodos();
-    });
+    // this.#todoView.setupToggleListener((todo) => {
+    //   todo.toggleStatus();
+    //   this.#displayTodos();
+    // });
 
-    this.#inputController.onAddTitleClick((newTitle) => {
-      this.#createNewList(newTitle);
-    });
+    // this.#todoView.setupRemoveTodoListener((todo) => {
+    //   this.#todoList.delete(todo);
+    //   this.#displayTodos();
+    // });
   }
 }

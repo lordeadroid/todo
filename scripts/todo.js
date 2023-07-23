@@ -1,7 +1,9 @@
 class IdGenerator {
+  #name;
   #number;
 
-  constructor() {
+  constructor(name) {
+    this.#name = name;
     this.#number = 0;
   }
 
@@ -11,7 +13,8 @@ class IdGenerator {
 
   generate() {
     this.#updateId();
-    return `task-${this.#number}`;
+    const newId = `${this.#name}-${this.#number}`;
+    return newId;
   }
 }
 
