@@ -3,12 +3,23 @@ class MouseController {
   #submitButton;
   #sortButton;
   #groupButton;
+  #titleButton;
+  #titleBox;
 
-  constructor(taskBox, submitButton, sortButton, groupButton) {
+  constructor(
+    taskBox,
+    submitButton,
+    sortButton,
+    groupButton,
+    titleButton,
+    titleBox
+  ) {
     this.#taskBox = taskBox;
     this.#submitButton = submitButton;
     this.#sortButton = sortButton;
     this.#groupButton = groupButton;
+    this.#titleButton = titleButton;
+    this.#titleBox = titleBox;
   }
 
   #readTodo() {
@@ -30,5 +41,13 @@ class MouseController {
 
   onGroupSort(toggleGroupSort) {
     this.#groupButton.onclick = toggleGroupSort;
+  }
+
+  onAddTitleClick(create) {
+    this.#titleButton.onclick = () => {
+      const taskTitle = this.#titleBox.value;
+      this.#titleBox.value = "";
+      create(taskTitle);
+    };
   }
 }

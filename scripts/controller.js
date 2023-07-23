@@ -43,6 +43,11 @@ class TodoController {
     this.#displayTodos();
   }
 
+  #createNewList(title) {
+    this.#todoView.createNewList(title);
+    this.#displayTodos();
+  }
+
   start() {
     this.#inputController.onSaveButtonClick((todoDescription) =>
       this.#createNewTodo(todoDescription)
@@ -62,6 +67,10 @@ class TodoController {
     this.#todoView.setupRemoveTodoListener((todo) => {
       this.#todoList.delete(todo);
       this.#displayTodos();
+    });
+
+    this.#inputController.onAddTitleClick((newTitle) => {
+      this.#createNewList(newTitle);
     });
   }
 }

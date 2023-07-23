@@ -8,10 +8,18 @@ const main = () => {
     "save-button",
     "sort-button",
     "complete-button",
+    "add-title-button",
+    "add-title",
   ];
 
-  const [taskBox, submitButton, sortButton, completeButton] =
-    getElements(elementsName);
+  const [
+    taskBox,
+    submitButton,
+    sortButton,
+    completeButton,
+    titleButton,
+    titleBox,
+  ] = getElements(elementsName);
 
   const id = new IdGenerator();
   const todoList = new TodoList();
@@ -21,7 +29,9 @@ const main = () => {
     taskBox,
     submitButton,
     sortButton,
-    completeButton
+    completeButton,
+    titleButton,
+    titleBox
   );
 
   const todoController = new TodoController(
