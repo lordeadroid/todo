@@ -21,9 +21,14 @@ class TodoController {
   #displayTodos() {
     let todos = this.#todoList.allTodos;
 
-    if (this.#sortPreference.alphabetically) todos = this.#todoList.sortedTodos;
-    if (this.#sortPreference.byGroup)
+    if (this.#sortPreference.alphabetically) {
+      todos = this.#todoList.sortedTodos;
+    }
+
+    if (this.#sortPreference.byGroup) {
       todos = this.#todoList.sortedCompletedTodos;
+    }
+
     this.#todoView.render(todos);
   }
 
@@ -55,14 +60,18 @@ class TodoController {
       this.#createList(listName);
     });
 
-    // this.#todoView.setupToggleListener((todo) => {
-    //   todo.toggleStatus();
-    //   this.#displayTodos();
-    // });
+    this.#todoView.setupAddNewTodo((todo) => {
+      this.#createNewTodo(todo);
+    });
 
-    // this.#todoView.setupRemoveTodoListener((todo) => {
-    //   this.#todoList.delete(todo);
-    //   this.#displayTodos();
-    // });
+    this.#todoView.setupToggleListener((todo) => {
+      todo.toggleStatus();
+      this.#displayTodos();
+    });
+
+    this.#todoView.setupRemoveTodoListener((todo) => {
+      this.#todoList.delete(todo);
+      this.#displayTodos();
+    });
   }
 }

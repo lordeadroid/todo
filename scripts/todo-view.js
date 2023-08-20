@@ -3,9 +3,9 @@ class TodoView {
   #changeTodoStatus;
   #removeTodo;
   #page;
+  #createTodo;
 
   constructor() {
-    this.#tasksElements = document.getElementById("tasks");
     this.#page = document.getElementById("page");
   }
 
@@ -35,15 +35,15 @@ class TodoView {
     todoElement.id = todo.id;
     todoElement.innerText = todo.description;
 
-    todoElement.onclick = () => {
-      this.#changeTodoStatus(todo);
-    };
+    // todoElement.onclick = () => {
+    //   this.#changeTodoStatus(todo);
+    // };
 
     return todoElement;
   }
 
   render(todos) {
-    this.#removeTodos();
+    // this.#removeTodos();
 
     todos.forEach((todo) => {
       const todoElement = this.#createTodoElement(todo);
@@ -54,8 +54,13 @@ class TodoView {
       }
 
       todoElement.appendChild(deleteButton);
-      this.#tasksElements.appendChild(todoElement);
+      const element = document.querySelector("#list-1");
+      element.appendChild(todoElement);
     });
+  }
+
+  setupAddNewTodo(createTodo) {
+    this.#createTodo = createTodo;
   }
 
   setupToggleListener(changeTodoStatus) {
@@ -138,12 +143,17 @@ class TodoView {
 
   renderList(listName, listId) {
     const listNameElement = this.#createListNameElement(listName);
-    const list = document.createElement("section");
     const taskBox = this.#createTaskBox(listId);
     const addTaskButton = this.#createAddTaskButton(listId);
     const sortButton = this.#createSortButton(listId);
     const doneButton = this.#createDoneButton(listId);
 
+    addTaskButton.onclick = () => {
+      this.#createTodo(taskBox.value);
+    };
+
+    const list = document.createElement("section");
+    list.id = listId;
     list.appendChild(listNameElement);
     list.appendChild(taskBox);
     list.appendChild(addTaskButton);
