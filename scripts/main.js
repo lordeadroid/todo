@@ -5,15 +5,17 @@ const getElements = (elementsName) => {
 };
 
 const main = () => {
-  const elementsName = ["add-list-box", "add-list-button"];
-  const [addListBox, addListButton] = getElements(elementsName);
+  const elementsName = ["add-list-box", "add-list-button", "todo-tist"];
+  const [addListBox, addListButton, todoListContainer] =
+    getElements(elementsName);
 
   const todoId = new IdGenerator("todo");
   const listId = new IdGenerator("list");
   const todoList = new TodoList();
   const todoView = new TodoView();
 
-  const inputController = new InputController(addListBox, addListButton);
+  const inputController = new InputController(addListButton);
+
   const todoController = new TodoController(
     inputController,
     todoId,
@@ -21,6 +23,7 @@ const main = () => {
     todoList,
     todoView
   );
+
   todoController.start();
 };
 

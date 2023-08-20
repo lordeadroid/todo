@@ -1,17 +1,17 @@
 class InputController {
-  #addListBox;
   #addListButton;
 
-  constructor(addListBox, addListButton) {
-    this.#addListBox = addListBox;
+  constructor(addListButton) {
     this.#addListButton = addListButton;
   }
 
   onAddListClick(createList) {
     this.#addListButton.onclick = () => {
-      const listName = this.#addListBox.value;
-      this.#addListBox.value = "";
-      createList(listName);
+      fetch("/todos")
+        .then((response) => response.json())
+        .then((todos) => {
+          createList(JSON.parse(todos));
+        });
     };
   }
 }

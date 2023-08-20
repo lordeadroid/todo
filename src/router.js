@@ -1,4 +1,5 @@
 const { ROUTES } = require("./routes.js");
+const { handleInvalidMethod } = require("./handlers.js");
 
 const getHandler = (request) => {
   return (

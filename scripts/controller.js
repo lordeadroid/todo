@@ -52,8 +52,8 @@ class TodoController {
     this.#displayTodos();
   }
 
-  #createList(listName) {
-    this.#todoView.renderList(listName, this.#listId.generate());
+  #createList(todoLists) {
+    this.#todoView.renderAllLists(todoLists);
   }
 
   start() {

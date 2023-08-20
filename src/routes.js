@@ -1,4 +1,4 @@
-const { serveHomePage } = require("./handlers.js");
+const { serveHomePage, serveScripts, sendTodos } = require("./handlers.js");
 
 const METHODS = {
   get: "GET",
@@ -6,9 +6,24 @@ const METHODS = {
 
 const ROUTES = [
   {
-    route: "/",
+    route: "^/$",
     method: METHODS.get,
     handler: serveHomePage,
+  },
+  {
+    route: "^/scripts/",
+    method: METHODS.get,
+    handler: serveScripts,
+  },
+  {
+    route: "^/todos$",
+    method: METHODS.get,
+    handler: sendTodos,
+  },
+  {
+    route: "/favicon.ico",
+    method: METHODS.get,
+    handler: () => {},
   },
 ];
 
