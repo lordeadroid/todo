@@ -4,7 +4,8 @@
   "description": "",
   "main": "todo.js",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "server": "node --watch server.js" 
   },
   "keywords": [],
   "author": "",
