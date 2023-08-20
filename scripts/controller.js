@@ -18,7 +18,7 @@ class TodoController {
     };
   }
 
-  #displayTodos() {
+  #displayTodos(listId) {
     let todos = this.#todoList.allTodos;
 
     if (this.#sortPreference.alphabetically) {
@@ -29,14 +29,15 @@ class TodoController {
       todos = this.#todoList.sortedCompletedTodos;
     }
 
-    this.#todoView.render(todos);
+    this.#todoView.render(todos, listId);
   }
 
-  #createNewTodo(todoDescription) {
-    const todo = new Todo(this.#todoId.generate(), todoDescription);
+  #createNewTodo(todoDescription, listId) {
+    const id = `${listId}-${this.#todoId.generate()}`;
+    const todo = new Todo(id, todoDescription);
     this.#todoList.add(todo);
 
-    this.#displayTodos();
+    this.#displayTodos(listId);
   }
 
   #toggleSortAlphabetically() {
@@ -60,8 +61,8 @@ class TodoController {
       this.#createList(listName);
     });
 
-    this.#todoView.setupAddNewTodo((todo) => {
-      this.#createNewTodo(todo);
+    this.#todoView.setupAddNewTodo((todoDescription, listId) => {
+      this.#createNewTodo(todoDescription, listId);
     });
 
     this.#todoView.setupToggleListener((todo) => {

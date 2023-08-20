@@ -9,17 +9,13 @@ class TodoView {
     this.#page = document.getElementById("page");
   }
 
-  #removeTodos() {
-    while (this.#tasksElements.hasChildNodes()) {
-      this.#tasksElements.removeChild(this.#tasksElements.firstChild);
-    }
-  }
+  #removeTodos() {}
 
   #createDeleteButton(todo) {
     const deleteButton = document.createElement("input");
     deleteButton.type = "button";
     deleteButton.value = "delete";
-    deleteButton.id = todo;
+    deleteButton.id = todo.id;
     deleteButton.classList = "delete-button";
 
     deleteButton.onclick = () => {
@@ -35,15 +31,16 @@ class TodoView {
     todoElement.id = todo.id;
     todoElement.innerText = todo.description;
 
-    // todoElement.onclick = () => {
-    //   this.#changeTodoStatus(todo);
-    // };
+    todoElement.onclick = () => {
+      this.#changeTodoStatus(todo);
+    };
 
     return todoElement;
   }
 
-  render(todos) {
-    // this.#removeTodos();
+  render(todos, listId) {
+    const todosElement = document.getElementById(`${listId}-todos`);
+    todosElement.replaceChildren();
 
     todos.forEach((todo) => {
       const todoElement = this.#createTodoElement(todo);
@@ -54,7 +51,7 @@ class TodoView {
       }
 
       todoElement.appendChild(deleteButton);
-      const element = document.querySelector("#list-1");
+      const element = document.getElementById(`${listId}-todos`);
       element.appendChild(todoElement);
     });
   }
@@ -91,7 +88,7 @@ class TodoView {
     const values = [
       ["type", "button"],
       ["value", "Add"],
-      ["class", listId],
+      ["id", `${listId}-add`],
       ["class", "buttons"],
     ];
 
@@ -107,7 +104,7 @@ class TodoView {
     const values = [
       ["type", "button"],
       ["value", "Sort"],
-      ["class", listId],
+      ["id", `${listId}-sort`],
       ["class", "buttons"],
     ];
 
@@ -123,7 +120,7 @@ class TodoView {
     const values = [
       ["type", "button"],
       ["value", "Done Tasks"],
-      ["class", listId],
+      ["id", `${listId}-done`],
       ["class", "buttons"],
     ];
 
@@ -141,24 +138,48 @@ class TodoView {
     return listNameElement;
   }
 
-  renderList(listName, listId) {
+  #createTodosElements(listId) {
+    const todos = document.createElement("div");
+    todos.setAttribute("id", `${listId}-todos`);
+
+    return todos;
+  }
+
+  #createTodoListElements(listName, listId) {
     const listNameElement = this.#createListNameElement(listName);
     const taskBox = this.#createTaskBox(listId);
     const addTaskButton = this.#createAddTaskButton(listId);
     const sortButton = this.#createSortButton(listId);
     const doneButton = this.#createDoneButton(listId);
+    const todos = this.#createTodosElements(listId);
 
-    addTaskButton.onclick = () => {
-      this.#createTodo(taskBox.value);
+    return {
+      listNameElement,
+      taskBox,
+      addTaskButton,
+      sortButton,
+      doneButton,
+      todos,
+    };
+  }
+
+  #appendElementsToList(list, elements) {
+    Object.entries(elements).forEach(([_, element]) => {
+      list.appendChild(element);
+    });
+  }
+
+  renderList(listName, listId) {
+    const elements = this.#createTodoListElements(listName, listId);
+
+    elements.addTaskButton.onclick = () => {
+      this.#createTodo(elements.taskBox.value, listId);
     };
 
     const list = document.createElement("section");
     list.id = listId;
-    list.appendChild(listNameElement);
-    list.appendChild(taskBox);
-    list.appendChild(addTaskButton);
-    list.appendChild(sortButton);
-    list.appendChild(doneButton);
+
+    this.#appendElementsToList(list, elements);
 
     this.#page.appendChild(list);
   }
