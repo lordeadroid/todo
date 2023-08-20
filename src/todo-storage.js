@@ -1,11 +1,20 @@
 class TodoStorage {
   #todos;
+  #writeFileSync;
+  #filePath;
 
-  constructor() {
-    this.#todos = [];
+  constructor(todos, filePath, writeFileSync) {
+    this.#comments = todos;
+    this.#writeFileSync = writeFileSync;
+    this.#filePath = filePath;
   }
 
-  addTodo(todo) {
+  #saveTodo() {
+    this.#writeFileSync(this.#filePath, JSON.stringify(this.#todos));
+  }
+
+  addTodos(todo) {
+    this.#saveTodo();
     this.#todos.push(todo);
   }
 
@@ -13,3 +22,5 @@ class TodoStorage {
     return [...this.#todos];
   }
 }
+
+module.exports = { TodoStorage };

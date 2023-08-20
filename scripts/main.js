@@ -14,7 +14,7 @@ const main = () => {
   const todoList = new TodoList();
   const todoView = new TodoView();
 
-  const inputController = new InputController(addListButton);
+  const inputController = new InputController(addListBox, addListButton);
 
   const todoController = new TodoController(
     inputController,

@@ -11,3 +11,6 @@ create new task (div) w
     button for moving completing task to bottom (input) d
 
 alltasks (div)
+
+make an entity that will handle with database
+on adding a list save the new list on the database

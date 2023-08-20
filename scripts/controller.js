@@ -5,13 +5,22 @@ class TodoController {
   #todoList;
   #todoView;
   #sortPreference;
+  #todoStorage;
 
-  constructor(inputController, todoId, listId, todoList, todoView) {
+  constructor(
+    inputController,
+    todoId,
+    listId,
+    todoList,
+    todoView,
+    todoStorage
+  ) {
     this.#inputController = inputController;
     this.#todoId = todoId;
     this.#listId = listId;
     this.#todoList = todoList;
     this.#todoView = todoView;
+    this.#todoStorage = todoStorage;
     this.#sortPreference = {
       alphabetically: false,
       byGroup: false,
@@ -52,7 +61,8 @@ class TodoController {
     this.#displayTodos();
   }
 
-  #createList(todoLists) {
+  #createList(todoLists, listName) {
+    this.#todosList.add(listName);
     this.#todoView.renderAllLists(todoLists);
   }
 
