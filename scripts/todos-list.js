@@ -39,6 +39,16 @@ class TodoLists {
     todoList.toggleSortAlphabetically();
   }
 
+  toggleGroupSort(listId) {
+    const todoList = this.#todoLists.find((todoList) => {
+      if (listId === todoList.getTodoValues().listId) {
+        return todoList;
+      }
+    });
+
+    todoList.toggleSortByGroup();
+  }
+
   getTodoLists() {
     return [...this.#todoLists];
   }

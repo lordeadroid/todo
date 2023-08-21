@@ -3,7 +3,8 @@ class TodoView {
   #changeTodoStatus;
   #removeTodo;
   #createTodo;
-  #sortTodos;
+  #sortAlphabetically;
+  #sortByGroup;
 
   constructor() {
     this.#todoListContainer = document.getElementById("todo-list");
@@ -161,7 +162,11 @@ class TodoView {
     };
 
     elements.sortButton.onclick = () => {
-      this.#sortTodos(listId);
+      this.#sortAlphabetically(listId);
+    };
+
+    elements.doneButton.onclick = () => {
+      this.#sortByGroup(listId);
     };
 
     elements.taskBox.value = "";
@@ -192,7 +197,11 @@ class TodoView {
     this.#removeTodo = removeTodo;
   }
 
-  setupSortListener(sortTodos) {
-    this.#sortTodos = sortTodos;
+  setupSortAlphabetically(sortAlphabetically) {
+    this.#sortAlphabetically = sortAlphabetically;
+  }
+
+  setupSortByGroup(sortByGroup) {
+    this.#sortByGroup = sortByGroup;
   }
 }

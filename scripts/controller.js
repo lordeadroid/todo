@@ -3,7 +3,6 @@ class TodoController {
   #todoId;
   #listId;
   #todoView;
-  #sortPreference;
   #todoLists;
 
   constructor(inputController, todoView, todoLists, listId, todoId) {
@@ -14,27 +13,13 @@ class TodoController {
     this.#todoId = todoId;
   }
 
-  // #displayTodos(listId) {
-  //   let todos = this.#todoList.allTodos;
-
-  //   if (this.#sortPreference.alphabetically) {
-  //     todos = this.#todoList.sortedTodos;
-  //   }
-
-  //   if (this.#sortPreference.byGroup) {
-  //     todos = this.#todoList.sortedCompletedTodos;
-  //   }
-
-  //   this.#todoView.render(todos, listId);
-  // }
-
   #toggleSortAlphabetically(listId) {
     this.#todoLists.toggleSortAlphabetically(listId);
     this.#displayTodos();
   }
 
   #toggleGroupSort(listId) {
-    this.#todoLists.toggleGroupStatus(listId);
+    this.#todoLists.toggleGroupSort(listId);
     this.#displayTodos();
   }
 
@@ -74,8 +59,12 @@ class TodoController {
       this.#displayTodos();
     });
 
-    this.#todoView.setupSortListener((listId) => {
+    this.#todoView.setupSortAlphabetically((listId) => {
       this.#toggleSortAlphabetically(listId);
+    });
+
+    this.#todoView.setupSortByGroup((listId) => {
+      this.#toggleGroupSort(listId);
     });
   }
 }

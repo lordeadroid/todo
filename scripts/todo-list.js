@@ -48,11 +48,11 @@ class TodoList {
   }
 
   #sortedCompletedTodos() {
-    const completedTodos = this.allTodos.filter((todo) => {
+    const completedTodos = this.#getTodos().filter((todo) => {
       return todo.isDone;
     });
 
-    const unCompletedTodos = this.allTodos.filter((todo) => {
+    const unCompletedTodos = this.#getTodos().filter((todo) => {
       return !todo.isDone;
     });
 
