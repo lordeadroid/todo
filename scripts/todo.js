@@ -3,7 +3,7 @@ class Todo {
   #isDone;
   #description;
 
-  constructor(id, description) {
+  constructor(description, id) {
     this.#id = id;
     this.#description = description;
     this.#isDone = false;

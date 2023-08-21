@@ -38,19 +38,6 @@ class TodoView {
   render(todos, listId) {
     const todosElement = document.getElementById(`${listId}-todos`);
     todosElement.replaceChildren();
-
-    todos.forEach((todo) => {
-      const todoElement = this.#createTodoElement(todo);
-      const deleteButton = this.#createDeleteButton(todo);
-
-      if (todo.isDone) {
-        todoElement.classList.add("done");
-      }
-
-      todoElement.appendChild(deleteButton);
-      const element = document.getElementById(`${listId}-todos`);
-      element.appendChild(todoElement);
-    });
   }
 
   setupAddNewTodo(createTodo) {
@@ -65,11 +52,19 @@ class TodoView {
     this.#removeTodo = removeTodo;
   }
 
-  #createTodosElements(listId) {
-    const todos = document.createElement("div");
-    todos.setAttribute("id", `${listId}-todos`);
+  #createTodosElements(listId, todos) {
+    const todosContainer = document.createElement("div");
+    todosContainer.setAttribute("id", `${listId}-todos`);
 
-    return todos;
+    todos.forEach((todo) => {
+      const todoElement = this.#createTodoElement(todo);
+      const deleteButton = this.#createDeleteButton(todo);
+
+      todoElement.appendChild(deleteButton);
+      todosContainer.appendChild(todoElement);
+    });
+
+    return todosContainer;
   }
 
   #createDoneButton(listId) {
@@ -148,7 +143,7 @@ class TodoView {
     const addTaskButton = this.#createAddTaskButton(listId);
     const sortButton = this.#createSortButton(listId);
     const doneButton = this.#createDoneButton(listId);
-    const todosContainer = this.#createTodosElements(listId);
+    const todosContainer = this.#createTodosElements(listId, todos);
 
     return {
       listNameElement,
@@ -160,8 +155,9 @@ class TodoView {
     };
   }
 
+  // Only values required
   #appendElementsToList(list, elements) {
-    Object.entries(elements).forEach(([_, element]) => {
+    Object.values(elements).forEach((element) => {
       list.appendChild(element);
     });
   }
@@ -176,10 +172,6 @@ class TodoView {
     elements.taskBox.value = "";
     const list = document.createElement("section");
     list.id = listId;
-
-    elements.sortButton.onclick = () => {
-      this.#changeTodoStatus(todo);
-    };
 
     this.#appendElementsToList(list, elements);
     this.#todoListContainer.appendChild(list);

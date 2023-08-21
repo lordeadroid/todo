@@ -27,9 +27,9 @@ const main = () => {
   const encoding = "utf-8";
 
   readFile(databasePath, encoding, (_, content = "[]") => {
-    const todosList = JSON.parse(content);
-    const todoStorage = new TodoStorage(todosList, databasePath, writeFileSync);
-    const todoId = new IdGenerator("todo", todosList.length);
+    const todoLists = JSON.parse(content);
+    const todoStorage = new TodoStorage(todoLists, databasePath, writeFileSync);
+    const todoId = new IdGenerator("todo", todoLists.length);
     const listId = new IdGenerator("list");
 
     setupServer({ todoStorage, todoId, listId });

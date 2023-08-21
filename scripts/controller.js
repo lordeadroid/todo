@@ -1,25 +1,22 @@
+const log = (val, msg) => {
+  console.log(val, msg);
+  return val;
+};
+
 class TodoController {
   #inputController;
   #todoId;
   #listId;
-  #todoList;
   #todoView;
   #sortPreference;
-  #todoStorage;
-  #todosList;
+  #todoLists;
 
-  constructor(inputController, todoView, listId, todoId, todosList) {
+  constructor(inputController, todoView, todoLists, listId, todoId) {
     this.#inputController = inputController;
-    // this.#todoList = todoList;
     this.#todoView = todoView;
+    this.#todoLists = todoLists;
     this.#listId = listId;
     this.#todoId = todoId;
-    this.#todosList = todosList;
-
-    this.#sortPreference = {
-      alphabetically: false,
-      byGroup: false,
-    };
   }
 
   // #displayTodos(listId) {
@@ -36,12 +33,6 @@ class TodoController {
   //   this.#todoView.render(todos, listId);
   // }
 
-  #createTodo(todoDescription, listId) {
-    this.#todosList.addTodo(todoDescription, listId);
-
-    // this.#displayTodos(listId);
-  }
-
   #toggleSortAlphabetically() {
     this.#sortPreference.alphabetically = !this.#sortPreference.alphabetically;
 
@@ -54,23 +45,30 @@ class TodoController {
     this.#displayTodos();
   }
 
-  #createNewList(listName) {
-    this.#todosList.add(listName);
+  #createTodo(todoDescription, listId) {
+    const todo = new Todo(todoDescription, this.#todoId.generate());
+    this.#todoLists.addTodo(todo, listId);
+  }
+
+  #createTodoList(listName) {
+    const todoList = new TodoList(listName, this.#listId.generate());
+    this.#todoLists.addTodoList(todoList);
   }
 
   #displayTodos() {
-    const todos = this.#todosList.getTodosList();
-    this.#todoView.renderLists(todos);
+    const todos = this.#todoLists.getTodoLists();
+    this.#todoView.renderLists(log(todos, "display todos is called"));
   }
 
   start() {
     this.#inputController.onAddListClick((listName) => {
-      this.#createNewList(listName);
+      this.#createTodoList(listName);
       this.#displayTodos();
     });
 
     this.#todoView.setupAddNewTodo((todoDescription, listId) => {
       this.#createTodo(todoDescription, listId);
+      this.#displayTodos();
     });
 
     // this.#todoView.setupToggleListener((todo) => {

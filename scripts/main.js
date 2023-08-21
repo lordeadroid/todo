@@ -8,19 +8,19 @@ const main = () => {
   const elementsName = ["add-list-box", "add-list-button"];
   const [addListBox, addListButton] = getElements(elementsName);
 
-  const todoView = new TodoView();
   const todoId = new IdGenerator("todo");
   const listId = new IdGenerator("list");
-  const todosList = new TodosList(TodoList, listId, todoId, IdGenerator);
+  const todoView = new TodoView();
+  const todoLists = new TodoLists();
 
   const inputController = new InputController(addListBox, addListButton);
 
   const todoController = new TodoController(
     inputController,
     todoView,
+    todoLists,
     listId,
-    todoId,
-    todosList
+    todoId
   );
 
   // fetch("/todos")
