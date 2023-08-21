@@ -25,16 +25,35 @@ const serveScripts = (request, response) => {
   });
 };
 
-const sendTodos = (_, response) => {
-  const path = "./database/todos.json";
+const sendTodos = (_, response, env) => {
+  const todos = env.todoStorage.getTodos();
 
-  readFile(path, "utf-8", (error, content) => {
-    if (error) {
-      console.log(error);
-    }
+  response.setHeader(HEADERS.contentType, MIME_TYPES.json);
+  response.end(JSON.stringify(todos));
+};
 
+const createList = (listName, env) => {
+  const listId = env.listId.generate();
+  const todos = [];
+
+  return { listName, listId, todos };
+};
+
+const addTodos = (request, response, env) => {
+  let listName = "";
+
+  request.on("data", (data) => {
+    listName += data;
+  });
+
+  request.on("end", () => {
+    const list = createList(listName, env);
+    env.todoStorage.addTodos(list);
+    const todos = env.todoStorage.getTodos();
+
+    response.statusCode = 201;
     response.setHeader(HEADERS.contentType, MIME_TYPES.json);
-    response.end(JSON.stringify(content));
+    response.end(JSON.stringify(todos));
   });
 };
 
@@ -43,4 +62,5 @@ module.exports = {
   handleInvalidMethod,
   serveScripts,
   sendTodos,
+  addTodos,
 };

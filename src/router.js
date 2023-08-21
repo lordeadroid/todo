@@ -10,9 +10,9 @@ const getHandler = (request) => {
   );
 };
 
-const route = (request, response) => {
+const route = (request, response, env) => {
   const { handler } = getHandler(request);
-  handler(request, response);
+  handler(request, response, env);
 };
 
 module.exports = { route };

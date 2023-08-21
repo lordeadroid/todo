@@ -7,20 +7,10 @@ class TodoController {
   #sortPreference;
   #todoStorage;
 
-  constructor(
-    inputController,
-    todoId,
-    listId,
-    todoList,
-    todoView,
-    todoStorage
-  ) {
+  constructor(inputController, todoList, todoView) {
     this.#inputController = inputController;
-    this.#todoId = todoId;
-    this.#listId = listId;
     this.#todoList = todoList;
     this.#todoView = todoView;
-    this.#todoStorage = todoStorage;
     this.#sortPreference = {
       alphabetically: false,
       byGroup: false,
@@ -61,28 +51,27 @@ class TodoController {
     this.#displayTodos();
   }
 
-  #createList(todoLists, listName) {
-    this.#todosList.add(listName);
-    this.#todoView.renderAllLists(todoLists);
+  #addList(todosList) {
+    this.#todoView.renderAllLists(todosList);
   }
 
   start() {
-    this.#inputController.onAddListClick((listName) => {
-      this.#createList(listName);
+    this.#inputController.onAddListClick((todosList) => {
+      this.#addList(todosList);
     });
 
-    this.#todoView.setupAddNewTodo((todoDescription, listId) => {
-      this.#createNewTodo(todoDescription, listId);
-    });
+    // this.#todoView.setupAddNewTodo((todoDescription, listId) => {
+    //   this.#createNewTodo(todoDescription, listId);
+    // });
 
-    this.#todoView.setupToggleListener((todo) => {
-      todo.toggleStatus();
-      this.#displayTodos();
-    });
+    // this.#todoView.setupToggleListener((todo) => {
+    //   todo.toggleStatus();
+    //   this.#displayTodos();
+    // });
 
-    this.#todoView.setupRemoveTodoListener((todo) => {
-      this.#todoList.delete(todo);
-      this.#displayTodos();
-    });
+    // this.#todoView.setupRemoveTodoListener((todo) => {
+    //   this.#todoList.delete(todo);
+    //   this.#displayTodos();
+    // });
   }
 }

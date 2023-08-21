@@ -4,7 +4,7 @@ class TodoStorage {
   #filePath;
 
   constructor(todos, filePath, writeFileSync) {
-    this.#comments = todos;
+    this.#todos = todos;
     this.#writeFileSync = writeFileSync;
     this.#filePath = filePath;
   }

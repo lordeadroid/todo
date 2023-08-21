@@ -1,7 +1,13 @@
-const { serveHomePage, serveScripts, sendTodos } = require("./handlers.js");
+const {
+  serveHomePage,
+  serveScripts,
+  sendTodos,
+  addTodos,
+} = require("./handlers.js");
 
 const METHODS = {
   get: "GET",
+  post: "POST",
 };
 
 const ROUTES = [
@@ -19,6 +25,11 @@ const ROUTES = [
     route: "^/todos$",
     method: METHODS.get,
     handler: sendTodos,
+  },
+  {
+    route: "^/todos/add$",
+    method: METHODS.post,
+    handler: addTodos,
   },
   {
     route: "/favicon.ico",

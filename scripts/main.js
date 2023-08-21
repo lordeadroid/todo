@@ -5,12 +5,9 @@ const getElements = (elementsName) => {
 };
 
 const main = () => {
-  const elementsName = ["add-list-box", "add-list-button", "todo-tist"];
-  const [addListBox, addListButton, todoListContainer] =
-    getElements(elementsName);
+  const elementsName = ["add-list-box", "add-list-button"];
+  const [addListBox, addListButton] = getElements(elementsName);
 
-  const todoId = new IdGenerator("todo");
-  const listId = new IdGenerator("list");
   const todoList = new TodoList();
   const todoView = new TodoView();
 
@@ -18,11 +15,15 @@ const main = () => {
 
   const todoController = new TodoController(
     inputController,
-    todoId,
-    listId,
     todoList,
     todoView
   );
+
+  fetch("/todos")
+    .then((response) => response.json())
+    .then((todosData) => {
+      todoView.renderAllLists(todosData);
+    });
 
   todoController.start();
 };

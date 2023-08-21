@@ -1,23 +1,3 @@
-class IdGenerator {
-  #name;
-  #number;
-
-  constructor(name) {
-    this.#name = name;
-    this.#number = 0;
-  }
-
-  #updateId() {
-    this.#number += 1;
-  }
-
-  generate() {
-    this.#updateId();
-    const newId = `${this.#name}-${this.#number}`;
-    return newId;
-  }
-}
-
 class Todo {
   #id;
   #isDone;

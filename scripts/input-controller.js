@@ -12,10 +12,13 @@ class InputController {
       const listName = this.#addListBox.value;
       this.#addListBox.value = "";
 
-      fetch("/todos")
+      fetch("/todos/add", {
+        method: "POST",
+        body: listName,
+      })
         .then((response) => response.json())
         .then((todos) => {
-          createList(JSON.parse(todos), listName);
+          createList(todos);
         });
     };
   }
