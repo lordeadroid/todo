@@ -19,6 +19,16 @@ class TodoLists {
     todoList.addTodo(todo);
   }
 
+  deleteTodo(todo, listId) {
+    const todoList = this.#todoLists.find((todoList) => {
+      if (listId === todoList.getTodoValues().listId) {
+        return todoList;
+      }
+    });
+
+    todoList.delete(todo);
+  }
+
   getTodoLists() {
     return [...this.#todoLists];
   }

@@ -35,11 +35,6 @@ class TodoView {
     return todoElement;
   }
 
-  render(todos, listId) {
-    const todosElement = document.getElementById(`${listId}-todos`);
-    todosElement.replaceChildren();
-  }
-
   setupAddNewTodo(createTodo) {
     this.#createTodo = createTodo;
   }
@@ -59,6 +54,14 @@ class TodoView {
     todos.forEach((todo) => {
       const todoElement = this.#createTodoElement(todo);
       const deleteButton = this.#createDeleteButton(todo);
+
+      if (todo.isDone) {
+        todoElement.classList.add("done");
+      }
+
+      deleteButton.onclick = () => {
+        this.#removeTodo(todo, listId);
+      };
 
       todoElement.appendChild(deleteButton);
       todosContainer.appendChild(todoElement);

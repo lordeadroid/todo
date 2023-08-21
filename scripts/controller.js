@@ -1,8 +1,3 @@
-const log = (val, msg) => {
-  console.log(val, msg);
-  return val;
-};
-
 class TodoController {
   #inputController;
   #todoId;
@@ -57,7 +52,7 @@ class TodoController {
 
   #displayTodos() {
     const todos = this.#todoLists.getTodoLists();
-    this.#todoView.renderLists(log(todos, "display todos is called"));
+    this.#todoView.renderLists(todos);
   }
 
   start() {
@@ -71,14 +66,14 @@ class TodoController {
       this.#displayTodos();
     });
 
-    // this.#todoView.setupToggleListener((todo) => {
-    //   todo.toggleStatus();
-    //   this.#displayTodos();
-    // });
+    this.#todoView.setupToggleListener((todo) => {
+      todo.toggleStatus();
+      this.#displayTodos();
+    });
 
-    // this.#todoView.setupRemoveTodoListener((todo) => {
-    //   this.#todoList.delete(todo);
-    //   this.#displayTodos();
-    // });
+    this.#todoView.setupRemoveTodoListener((todo, listId) => {
+      this.#todoLists.deleteTodo(todo, listId);
+      this.#displayTodos();
+    });
   }
 }
