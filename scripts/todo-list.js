@@ -1,12 +1,31 @@
 class TodoList {
+  #listName;
+  #listId;
+  #Todo;
+  #id;
   #todos;
 
-  constructor() {
+  constructor(listName, listId, Todo, id) {
+    this.#listName = listName;
+    this.#listId = listId;
+    this.#Todo = Todo;
+    this.#id = id;
     this.#todos = [];
   }
 
-  add(todo) {
-    this.#todos.push(todo);
+  add(todoDescription) {
+    const todoId = id.generate();
+    const todo = new this.#Todo(todoDescription, todoId);
+
+    this.#todos.push(Object.entries([todoId, todo]));
+  }
+
+  getTodoValues() {
+    const listName = this.#listName;
+    const listId = this.#listId;
+    const todos = this.#todos;
+    
+    return { listName, listId, todos };
   }
 
   get allTodos() {

@@ -6,37 +6,40 @@ class TodoController {
   #todoView;
   #sortPreference;
   #todoStorage;
+  #todosList;
 
-  constructor(inputController, todoList, todoView) {
+  constructor(inputController, todoView, listId, todoId, todosList) {
     this.#inputController = inputController;
-    this.#todoList = todoList;
+    // this.#todoList = todoList;
     this.#todoView = todoView;
+    this.#listId = listId;
+    this.#todoId = todoId;
+    this.#todosList = todosList;
+
     this.#sortPreference = {
       alphabetically: false,
       byGroup: false,
     };
   }
 
-  #displayTodos(listId) {
-    let todos = this.#todoList.allTodos;
+  // #displayTodos(listId) {
+  //   let todos = this.#todoList.allTodos;
 
-    if (this.#sortPreference.alphabetically) {
-      todos = this.#todoList.sortedTodos;
-    }
+  //   if (this.#sortPreference.alphabetically) {
+  //     todos = this.#todoList.sortedTodos;
+  //   }
 
-    if (this.#sortPreference.byGroup) {
-      todos = this.#todoList.sortedCompletedTodos;
-    }
+  //   if (this.#sortPreference.byGroup) {
+  //     todos = this.#todoList.sortedCompletedTodos;
+  //   }
 
-    this.#todoView.render(todos, listId);
-  }
+  //   this.#todoView.render(todos, listId);
+  // }
 
-  #createNewTodo(todoDescription, listId) {
-    const id = `${listId}-${this.#todoId.generate()}`;
-    const todo = new Todo(id, todoDescription);
-    this.#todoList.add(todo);
+  #createTodo(todoDescription, listId) {
+    this.#todosList.addTodo(todoDescription, listId);
 
-    this.#displayTodos(listId);
+    // this.#displayTodos(listId);
   }
 
   #toggleSortAlphabetically() {
@@ -51,18 +54,24 @@ class TodoController {
     this.#displayTodos();
   }
 
-  #addList(todosList) {
-    this.#todoView.renderAllLists(todosList);
+  #createNewList(listName) {
+    this.#todosList.add(listName);
+  }
+
+  #displayTodos() {
+    const todos = this.#todosList.getTodosList();
+    this.#todoView.renderLists(todos);
   }
 
   start() {
-    this.#inputController.onAddListClick((todosList) => {
-      this.#addList(todosList);
+    this.#inputController.onAddListClick((listName) => {
+      this.#createNewList(listName);
+      this.#displayTodos();
     });
 
-    // this.#todoView.setupAddNewTodo((todoDescription, listId) => {
-    //   this.#createNewTodo(todoDescription, listId);
-    // });
+    this.#todoView.setupAddNewTodo((todoDescription, listId) => {
+      this.#createTodo(todoDescription, listId);
+    });
 
     // this.#todoView.setupToggleListener((todo) => {
     //   todo.toggleStatus();

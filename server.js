@@ -7,12 +7,12 @@ const { TodoStorage } = require("./src/todo-storage.js");
 
 const log = (request) => {
   console.log(request.method, request.url);
+  return request;
 };
 
 const setupServer = (env) => {
   const server = http.createServer((request, response) => {
-    log(request);
-    route(request, response, env);
+    route(log(request), response, env);
   });
 
   const PORT = 9000;

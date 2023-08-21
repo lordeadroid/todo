@@ -173,18 +173,23 @@ class TodoView {
       this.#createTodo(elements.taskBox.value, listId);
     };
 
+    elements.taskBox.value = "";
     const list = document.createElement("section");
     list.id = listId;
+
+    elements.sortButton.onclick = () => {
+      this.#changeTodoStatus(todo);
+    };
 
     this.#appendElementsToList(list, elements);
     this.#todoListContainer.appendChild(list);
   }
 
-  renderAllLists(todoLists) {
+  renderLists(todoLists) {
     this.#todoListContainer.replaceChildren();
 
     todoLists.forEach((todoList) => {
-      this.#renderList(todoList);
+      this.#renderList(todoList.getTodoValues());
     });
   }
 }
