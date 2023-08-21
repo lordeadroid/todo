@@ -28,15 +28,13 @@ class TodoController {
   //   this.#todoView.render(todos, listId);
   // }
 
-  #toggleSortAlphabetically() {
-    this.#sortPreference.alphabetically = !this.#sortPreference.alphabetically;
-
+  #toggleSortAlphabetically(listId) {
+    this.#todoLists.toggleSortAlphabetically(listId);
     this.#displayTodos();
   }
 
-  #toggleGroupSort() {
-    this.#sortPreference.byGroup = !this.#sortPreference.byGroup;
-
+  #toggleGroupSort(listId) {
+    this.#todoLists.toggleGroupStatus(listId);
     this.#displayTodos();
   }
 
@@ -74,6 +72,10 @@ class TodoController {
     this.#todoView.setupRemoveTodoListener((todo, listId) => {
       this.#todoLists.deleteTodo(todo, listId);
       this.#displayTodos();
+    });
+
+    this.#todoView.setupSortListener((listId) => {
+      this.#toggleSortAlphabetically(listId);
     });
   }
 }

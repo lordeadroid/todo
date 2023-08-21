@@ -3,6 +3,7 @@ class TodoView {
   #changeTodoStatus;
   #removeTodo;
   #createTodo;
+  #sortTodos;
 
   constructor() {
     this.#todoListContainer = document.getElementById("todo-list");
@@ -33,18 +34,6 @@ class TodoView {
     };
 
     return todoElement;
-  }
-
-  setupAddNewTodo(createTodo) {
-    this.#createTodo = createTodo;
-  }
-
-  setupToggleListener(changeTodoStatus) {
-    this.#changeTodoStatus = changeTodoStatus;
-  }
-
-  setupRemoveTodoListener(removeTodo) {
-    this.#removeTodo = removeTodo;
   }
 
   #createTodosElements(listId, todos) {
@@ -158,7 +147,6 @@ class TodoView {
     };
   }
 
-  // Only values required
   #appendElementsToList(list, elements) {
     Object.values(elements).forEach((element) => {
       list.appendChild(element);
@@ -170,6 +158,10 @@ class TodoView {
 
     elements.addTaskButton.onclick = () => {
       this.#createTodo(elements.taskBox.value, listId);
+    };
+
+    elements.sortButton.onclick = () => {
+      this.#sortTodos(listId);
     };
 
     elements.taskBox.value = "";
@@ -186,5 +178,21 @@ class TodoView {
     todoLists.forEach((todoList) => {
       this.#renderList(todoList.getTodoValues());
     });
+  }
+
+  setupAddNewTodo(createTodo) {
+    this.#createTodo = createTodo;
+  }
+
+  setupToggleListener(changeTodoStatus) {
+    this.#changeTodoStatus = changeTodoStatus;
+  }
+
+  setupRemoveTodoListener(removeTodo) {
+    this.#removeTodo = removeTodo;
+  }
+
+  setupSortListener(sortTodos) {
+    this.#sortTodos = sortTodos;
   }
 }

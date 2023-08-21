@@ -2,12 +2,17 @@ class TodoList {
   #listName;
   #listId;
   #todos;
+  #sortPreference;
 
   constructor(listName, listId) {
     this.#listName = listName;
     this.#listId = listId;
 
     this.#todos = [];
+    this.#sortPreference = {
+      alphabetically: false,
+      byGroup: false,
+    };
   }
 
   addTodo(todo) {
@@ -17,24 +22,32 @@ class TodoList {
   getTodoValues() {
     const listName = this.#listName;
     const listId = this.#listId;
-    const todos = this.#todos;
+    const todos = this.getTodoLists();
 
     return { listName, listId, todos };
   }
 
-  get allTodos() {
+  delete(todo) {
+    const todoIndex = this.#todos.findIndex(
+      (element) => element.id === todo.id
+    );
+
+    this.#todos.splice(todoIndex, 1);
+  }
+
+  #getTodos() {
     return [...this.#todos];
   }
 
-  get sortedTodos() {
-    const todos = this.allTodos;
+  #sortedTodos() {
+    const todos = this.#getTodos();
 
     return todos.sort((firstTodo, secondTodo) => {
       return firstTodo.description > secondTodo.description ? 1 : -1;
     });
   }
 
-  get sortedCompletedTodos() {
+  #sortedCompletedTodos() {
     const completedTodos = this.allTodos.filter((todo) => {
       return todo.isDone;
     });
@@ -46,11 +59,25 @@ class TodoList {
     return unCompletedTodos.concat(completedTodos);
   }
 
-  delete(todo) {
-    const todoIndex = this.#todos.findIndex(
-      (element) => element.id === todo.id
-    );
+  toggleSortAlphabetically() {
+    this.#sortPreference.alphabetically = !this.#sortPreference.alphabetically;
+  }
 
-    this.#todos.splice(todoIndex, 1);
+  toggleSortByGroup() {
+    this.#sortPreference.byGroup = !this.#sortPreference.byGroup;
+  }
+
+  getTodoLists() {
+    let todos = this.#getTodos();
+
+    if (this.#sortPreference.alphabetically) {
+      todos = this.#sortedTodos();
+    }
+
+    if (this.#sortPreference.byGroup) {
+      todos = this.#sortedCompletedTodos();
+    }
+
+    return [...todos];
   }
 }

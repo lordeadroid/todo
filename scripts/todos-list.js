@@ -29,6 +29,16 @@ class TodoLists {
     todoList.delete(todo);
   }
 
+  toggleSortAlphabetically(listId) {
+    const todoList = this.#todoLists.find((todoList) => {
+      if (listId === todoList.getTodoValues().listId) {
+        return todoList;
+      }
+    });
+
+    todoList.toggleSortAlphabetically();
+  }
+
   getTodoLists() {
     return [...this.#todoLists];
   }
