@@ -2,7 +2,6 @@ const http = require("node:http");
 const { readFile, writeFileSync } = require("fs");
 
 const { route } = require("./src/router.js");
-const { IdGenerator } = require("./src/id.js");
 const { TodoStorage } = require("./src/todo-storage.js");
 
 const log = (request) => {

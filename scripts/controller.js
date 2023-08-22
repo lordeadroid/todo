@@ -1,49 +1,50 @@
 class TodoController {
-  #inputController;
-  #todoId;
-  #listId;
   #todoView;
   #todoLists;
+  #listIdGenerator;
+  #todoIdGenerator;
+  #addListBox;
+  #addListButton;
 
-  constructor(inputController, todoView, todoLists, listId, todoId) {
-    this.#inputController = inputController;
+  constructor(todoView, todoLists, listId, todoId, addListBox, addListButton) {
     this.#todoView = todoView;
     this.#todoLists = todoLists;
-    this.#listId = listId;
-    this.#todoId = todoId;
+    this.#listIdGenerator = listId;
+    this.#todoIdGenerator = todoId;
+    this.#addListBox = addListBox;
+    this.#addListButton = addListButton;
   }
 
   #toggleSortAlphabetically(listId) {
     this.#todoLists.toggleSortAlphabetically(listId);
-    this.#displayTodos();
   }
 
   #toggleGroupSort(listId) {
     this.#todoLists.toggleGroupSort(listId);
-    this.#displayTodos();
   }
 
   #createTodo(todoDescription, listId) {
-    const todo = new Todo(todoDescription, this.#todoId.generate());
+    const todo = new Todo(todoDescription, this.#todoIdGenerator.generate());
     this.#todoLists.addTodo(todo, listId);
   }
 
   #createTodoList(listName) {
-    const todoList = new TodoList(listName, this.#listId.generate());
+    const todoList = new TodoList(listName, this.#listIdGenerator.generate());
     this.#todoLists.addTodoList(todoList);
   }
 
   #displayTodos() {
     const todoListsDetails = this.#todoLists.getTodosDetails();
-
     this.#todoView.renderLists(todoListsDetails);
   }
 
   start() {
-    this.#inputController.onAddListClick((listName) => {
+    this.#addListButton.onclick = () => {
+      const listName = this.#addListBox.value;
+      this.#addListBox.value = "";
       this.#createTodoList(listName);
       this.#displayTodos();
-    });
+    };
 
     this.#todoView.setupAddNewTodo((todoDescription, listId) => {
       this.#createTodo(todoDescription, listId);
@@ -62,10 +63,12 @@ class TodoController {
 
     this.#todoView.setupSortAlphabetically((listId) => {
       this.#toggleSortAlphabetically(listId);
+      this.#displayTodos();
     });
 
     this.#todoView.setupSortByGroup((listId) => {
       this.#toggleGroupSort(listId);
+      this.#displayTodos();
     });
   }
 }

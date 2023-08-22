@@ -15,6 +15,10 @@ class TodoList {
     };
   }
 
+  get id() {
+    return this.#listId;
+  }
+
   addTodo(todo) {
     this.#todos.push(todo);
   }
@@ -32,12 +36,8 @@ class TodoList {
     this.#todos.splice(todoIndex, 1);
   }
 
-  #findTodo(todoId) {
-    return this.#todos.find((todo) => todoId === todo.id);
-  }
-
   toggleTodoStatus(todoId) {
-    const todo = this.#findTodo(todoId);
+    const todo = this.#todos.find((todo) => todoId === todo.id);
     todo.toggleStatus();
   }
 
@@ -50,13 +50,8 @@ class TodoList {
   }
 
   #sortedCompletedTodos() {
-    const completedTodos = this.#todos.filter((todo) => {
-      return todo.isDone;
-    });
-
-    const unCompletedTodos = this.#todos.filter((todo) => {
-      return !todo.isDone;
-    });
+    const completedTodos = this.#todos.filter((todo) => todo.isDone);
+    const unCompletedTodos = this.#todos.filter((todo) => !todo.isDone);
 
     return unCompletedTodos.concat(completedTodos);
   }
@@ -81,9 +76,5 @@ class TodoList {
     }
 
     return todos.map((todo) => todo.getDetails());
-  }
-
-  get id() {
-    return this.#listId;
   }
 }
