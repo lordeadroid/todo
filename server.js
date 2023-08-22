@@ -2,7 +2,7 @@ const http = require("node:http");
 
 const { route } = require("./src/router.js");
 const { readFile } = require("fs");
-const { createTodoLists } = require("./src/rit.js");
+const { createTodoLists } = require("./src/parser.js");
 const { TodoLists } = require("./src/todo-lists.js");
 
 const log = (request) => {
@@ -31,7 +31,7 @@ const main = () => {
 
   readFile(path, encoding, (_, content) => {
     const todoListsDetails = JSON.parse(content);
-    
+
     createTodoLists(todoListsDetails, todoLists);
     setupServer(todoLists);
   });
