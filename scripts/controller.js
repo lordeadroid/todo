@@ -34,8 +34,9 @@ class TodoController {
   }
 
   #displayTodos() {
-    const todos = this.#todoLists.getTodoLists();
-    this.#todoView.renderLists(todos);
+    const todoListsDetails = this.#todoLists.getTodosDetails();
+
+    this.#todoView.renderLists(todoListsDetails);
   }
 
   start() {
@@ -49,13 +50,13 @@ class TodoController {
       this.#displayTodos();
     });
 
-    this.#todoView.setupToggleListener((todo) => {
-      todo.toggleStatus();
+    this.#todoView.setupToggleListener((listId, todoId) => {
+      this.#todoLists.toggleTodoStatus(listId, todoId);
       this.#displayTodos();
     });
 
-    this.#todoView.setupRemoveTodoListener((todo, listId) => {
-      this.#todoLists.deleteTodo(todo, listId);
+    this.#todoView.setupRemoveTodoListener((listId, todoId) => {
+      this.#todoLists.deleteTodo(listId, todoId);
       this.#displayTodos();
     });
 

@@ -25,14 +25,10 @@ class TodoView {
   }
 
   #createTodoElement(todo) {
-    const todoElement = document.createElement("div");
+    const todoElement = document.createElement("p");
     todoElement.classList = "todos";
     todoElement.id = todo.id;
     todoElement.innerText = todo.description;
-
-    todoElement.onclick = () => {
-      this.#changeTodoStatus(todo);
-    };
 
     return todoElement;
   }
@@ -45,16 +41,20 @@ class TodoView {
       const todoElement = this.#createTodoElement(todo);
       const deleteButton = this.#createDeleteButton(todo);
 
+      todoElement.onclick = () => {
+        this.#changeTodoStatus(listId, todo.id);
+      };
+
       if (todo.isDone) {
         todoElement.classList.add("done");
       }
 
       deleteButton.onclick = () => {
-        this.#removeTodo(todo, listId);
+        this.#removeTodo(listId, todo.id);
       };
 
-      todoElement.appendChild(deleteButton);
       todosContainer.appendChild(todoElement);
+      todosContainer.appendChild(deleteButton);
     });
 
     return todosContainer;
@@ -181,7 +181,7 @@ class TodoView {
     this.#todoListContainer.replaceChildren();
 
     todoLists.forEach((todoList) => {
-      this.#renderList(todoList.getTodoValues());
+      this.#renderList(todoList);
     });
   }
 

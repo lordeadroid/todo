@@ -19,28 +19,30 @@ class TodoList {
     this.#todos.push(todo);
   }
 
-  getTodoValues() {
+  getDetails() {
     const listName = this.#listName;
     const listId = this.#listId;
-    const todos = this.getTodoLists();
+    const todos = this.getTodos();
 
     return { listName, listId, todos };
   }
 
-  delete(todo) {
-    const todoIndex = this.#todos.findIndex(
-      (element) => element.id === todo.id
-    );
-
+  delete(todoId) {
+    const todoIndex = this.#todos.findIndex((todo) => todo.id === todoId);
     this.#todos.splice(todoIndex, 1);
   }
 
-  #getTodos() {
-    return [...this.#todos];
+  #findTodo(todoId) {
+    return this.#todos.find((todo) => todoId === todo.id);
+  }
+
+  toggleTodoStatus(todoId) {
+    const todo = this.#findTodo(todoId);
+    todo.toggleStatus();
   }
 
   #sortedTodos() {
-    const todos = this.#getTodos();
+    const todos = this.#todos;
 
     return todos.sort((firstTodo, secondTodo) => {
       return firstTodo.description > secondTodo.description ? 1 : -1;
@@ -48,11 +50,11 @@ class TodoList {
   }
 
   #sortedCompletedTodos() {
-    const completedTodos = this.#getTodos().filter((todo) => {
+    const completedTodos = this.#todos.filter((todo) => {
       return todo.isDone;
     });
 
-    const unCompletedTodos = this.#getTodos().filter((todo) => {
+    const unCompletedTodos = this.#todos.filter((todo) => {
       return !todo.isDone;
     });
 
@@ -67,8 +69,8 @@ class TodoList {
     this.#sortPreference.byGroup = !this.#sortPreference.byGroup;
   }
 
-  getTodoLists() {
-    let todos = this.#getTodos();
+  getTodos() {
+    let todos = this.#todos;
 
     if (this.#sortPreference.alphabetically) {
       todos = this.#sortedTodos();
@@ -78,6 +80,10 @@ class TodoList {
       todos = this.#sortedCompletedTodos();
     }
 
-    return [...todos];
+    return todos.map((todo) => todo.getDetails());
+  }
+
+  get id() {
+    return this.#listId;
   }
 }

@@ -24,4 +24,12 @@ class Todo {
   toggleStatus() {
     this.#isDone = !this.#isDone;
   }
+
+  getDetails() {
+    const id = this.#id;
+    const description = this.#description;
+    const isDone = this.#isDone;
+
+    return { id, description, isDone };
+  }
 }

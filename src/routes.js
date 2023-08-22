@@ -3,6 +3,7 @@ const {
   serveScripts,
   sendTodos,
   addTodos,
+  serverStaticPage,
 } = require("./handlers.js");
 
 const METHODS = {
@@ -26,15 +27,20 @@ const ROUTES = [
     method: METHODS.get,
     handler: sendTodos,
   },
-  {
-    route: "^/todos/add$",
-    method: METHODS.post,
-    handler: addTodos,
-  },
+  // {
+  //   route: "^/todos/add$",
+  //   method: METHODS.post,
+  //   handler: addTodos,
+  // },
   {
     route: "/favicon.ico",
     method: METHODS.get,
     handler: () => {},
+  },
+  {
+    route: ".*",
+    method: METHODS.get,
+    handler: serverStaticPage,
   },
 ];
 

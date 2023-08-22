@@ -12,7 +12,8 @@ const log = (request) => {
 
 const setupServer = (env) => {
   const server = http.createServer((request, response) => {
-    route(log(request), response, env);
+    log(request);
+    route(request, response, env);
   });
 
   const PORT = 9000;
@@ -29,10 +30,8 @@ const main = () => {
   readFile(databasePath, encoding, (_, content = "[]") => {
     const todoLists = JSON.parse(content);
     const todoStorage = new TodoStorage(todoLists, databasePath, writeFileSync);
-    const todoId = new IdGenerator("todo", todoLists.length);
-    const listId = new IdGenerator("list");
 
-    setupServer({ todoStorage, todoId, listId });
+    setupServer({ todoStorage });
   });
 };
 

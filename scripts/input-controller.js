@@ -11,10 +11,7 @@ class InputController {
     this.#addListButton.onclick = () => {
       const listName = this.#addListBox.value;
       this.#addListBox.value = "";
-
       createNewList(listName);
     };
   }
-
-  setupAddTodo() {}
 }

@@ -2,6 +2,11 @@ const { readFile } = require("fs");
 
 const { HEADERS, MIME_TYPES } = require("./constants.js");
 
+const handlePageNotFound = (_, response) => {
+  response.statusCode = 404;
+  response.end();
+};
+
 const handleInvalidMethod = (_, response) => {
   response.statusCode = 405;
   response.end("Invalid Method");
@@ -33,7 +38,6 @@ const sendTodos = (_, response, env) => {
 };
 
 const createList = (listName, env) => {
-  const listId = env.listId.generate();
   const todos = [];
 
   return { listName, listId, todos };
@@ -57,10 +61,24 @@ const addTodos = (request, response, env) => {
   });
 };
 
+const serverStaticPage = (request, response, env) => {
+  const path = `.${request.url}`;
+
+  readFile(path, (error, content) => {
+    if (error) {
+      return handlePageNotFound(request, response);
+    }
+
+    response.setHeader(HEADERS.contentType, MIME_TYPES.js);
+    response.end(content);
+  });
+};
+
 module.exports = {
   serveHomePage,
   handleInvalidMethod,
   serveScripts,
   sendTodos,
   addTodos,
+  serverStaticPage,
 };

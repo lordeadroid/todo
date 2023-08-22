@@ -5,8 +5,8 @@ class TodoStorage {
 
   constructor(todos, filePath, writeFileSync) {
     this.#todos = todos;
-    this.#writeFileSync = writeFileSync;
     this.#filePath = filePath;
+    this.#writeFileSync = writeFileSync;
   }
 
   #saveTodo() {

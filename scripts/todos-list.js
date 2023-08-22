@@ -9,47 +9,36 @@ class TodoLists {
     this.#todoLists.push(todoList);
   }
 
-  addTodo(todo, listId) {
-    const todoList = this.#todoLists.find((todoList) => {
-      if (listId === todoList.getTodoValues().listId) {
-        return todoList;
-      }
-    });
+  #findTodoList(listId) {
+    return this.#todoLists.find((todoList) => listId === todoList.id);
+  }
 
+  addTodo(todo, listId) {
+    const todoList = this.#findTodoList(listId);
     todoList.addTodo(todo);
   }
 
-  deleteTodo(todo, listId) {
-    const todoList = this.#todoLists.find((todoList) => {
-      if (listId === todoList.getTodoValues().listId) {
-        return todoList;
-      }
-    });
-
-    todoList.delete(todo);
+  deleteTodo(listId, todoId) {
+    const todoList = this.#findTodoList(listId);
+    todoList.delete(todoId);
   }
 
   toggleSortAlphabetically(listId) {
-    const todoList = this.#todoLists.find((todoList) => {
-      if (listId === todoList.getTodoValues().listId) {
-        return todoList;
-      }
-    });
-
+    const todoList = this.#findTodoList(listId);
     todoList.toggleSortAlphabetically();
   }
 
   toggleGroupSort(listId) {
-    const todoList = this.#todoLists.find((todoList) => {
-      if (listId === todoList.getTodoValues().listId) {
-        return todoList;
-      }
-    });
-
+    const todoList = this.#findTodoList(listId);
     todoList.toggleSortByGroup();
   }
 
-  getTodoLists() {
-    return [...this.#todoLists];
+  toggleTodoStatus(listId, todoId) {
+    const todoList = this.#findTodoList(listId);
+    todoList.toggleTodoStatus(todoId);
+  }
+
+  getTodosDetails() {
+    return this.#todoLists.map((todoList) => todoList.getDetails());
   }
 }
