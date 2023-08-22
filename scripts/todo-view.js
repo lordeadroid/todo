@@ -3,15 +3,33 @@ class TodoView {
   #changeTodoStatus;
   #removeTodo;
   #createTodo;
-  #sortAlphabetically;
+  #sortByAlpha;
   #sortByGroup;
   #addListBox;
   #addListButton;
 
-  constructor(addListBox, addListButton) {
-    this.#todoListContainer = document.getElementById("todo-list");
+  constructor(addListBox, addListButton, todoListContainer) {
     this.#addListBox = addListBox;
     this.#addListButton = addListButton;
+    this.#todoListContainer = todoListContainer;
+  }
+
+  #appendElements(container, elements) {
+    elements.forEach((element) => {
+      container.appendChild(element);
+    });
+  }
+
+  #addAttributes(element, attributes) {
+    Object.entries(attributes).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
+  }
+
+  #setupOnClick(element, cb, ...params) {
+    element.onclick = () => {
+      cb(...params);
+    };
   }
 
   #createDeleteButton(todo) {
@@ -21,10 +39,7 @@ class TodoView {
     deleteButton.id = todo.id;
     deleteButton.classList = "delete-button";
 
-    deleteButton.onclick = () => {
-      this.#removeTodo(todo);
-    };
-
+    this.#setupOnClick(deleteButton, this.#removeTodo, todo);
     return deleteButton;
   }
 
@@ -45,20 +60,10 @@ class TodoView {
       const todoElement = this.#createTodoElement(todo);
       const deleteButton = this.#createDeleteButton(todo);
 
-      todoElement.onclick = () => {
-        this.#changeTodoStatus(listId, todo.id);
-      };
-
-      if (todo.isDone) {
-        todoElement.classList.add("done");
-      }
-
-      deleteButton.onclick = () => {
-        this.#removeTodo(listId, todo.id);
-      };
-
-      todosContainer.appendChild(todoElement);
-      todosContainer.appendChild(deleteButton);
+      if (todo.isDone) todoElement.classList.add("done");
+      this.#setupOnClick(todoElement, this.#changeTodoStatus, listId, todo.id);
+      this.#setupOnClick(deleteButton, this.#removeTodo, listId, todo.id);
+      this.#appendElements(todosContainer, [todoElement, deleteButton]);
     });
 
     return todosContainer;
@@ -66,65 +71,52 @@ class TodoView {
 
   #createDoneButton(listId) {
     const doneButton = document.createElement("input");
+    const attributes = {
+      type: "button",
+      value: "Done Tasks",
+      id: `${listId}-done`,
+      class: "buttons",
+    };
 
-    const values = [
-      ["type", "button"],
-      ["value", "Done Tasks"],
-      ["id", `${listId}-done`],
-      ["class", "buttons"],
-    ];
-
-    values.forEach((value) => {
-      doneButton.setAttribute(value[0], value[1]);
-    });
-
+    this.#addAttributes(doneButton, attributes);
     return doneButton;
   }
 
   #createSortButton(listId) {
     const sortButton = document.createElement("input");
-    const values = [
-      ["type", "button"],
-      ["value", "Sort"],
-      ["id", `${listId}-sort`],
-      ["class", "buttons"],
-    ];
+    const attributes = {
+      type: "button",
+      value: "Sort",
+      id: `${listId}-sort`,
+      class: "buttons",
+    };
 
-    values.forEach((value) => {
-      sortButton.setAttribute(value[0], value[1]);
-    });
-
+    this.#addAttributes(sortButton, attributes);
     return sortButton;
   }
 
   #createAddTaskButton(listId) {
     const addButtonElement = document.createElement("input");
-    const values = [
-      ["type", "button"],
-      ["value", "Add"],
-      ["id", `${listId}-add`],
-      ["class", "buttons"],
-    ];
+    const attributes = {
+      value: "Add",
+      id: `${listId}-add`,
+      type: "button",
+      class: "buttons",
+    };
 
-    values.forEach((value) => {
-      addButtonElement.setAttribute(value[0], value[1]);
-    });
-
+    this.#addAttributes(addButtonElement, attributes);
     return addButtonElement;
   }
 
   #createTaskBox(listId) {
     const taskBox = document.createElement("input");
-    const values = [
-      ["type", "text"],
-      ["class", listId],
-      ["placeholder", "Add new task"],
-    ];
+    const attributes = {
+      type: "text",
+      class: listId,
+      placeholder: "Add new task",
+    };
 
-    values.forEach((value) => {
-      taskBox.setAttribute(value[0], value[1]);
-    });
-
+    this.#addAttributes(taskBox, attributes);
     return taskBox;
   }
 
@@ -136,56 +128,36 @@ class TodoView {
   }
 
   #createTodoListElements(listName, listId, todos) {
-    const listNameElement = this.#createListNameElement(listName);
-    const taskBox = this.#createTaskBox(listId);
-    const addTaskButton = this.#createAddTaskButton(listId);
-    const sortButton = this.#createSortButton(listId);
-    const doneButton = this.#createDoneButton(listId);
-    const todosContainer = this.#createTodosElements(listId, todos);
-
     return {
-      listNameElement,
-      taskBox,
-      addTaskButton,
-      sortButton,
-      doneButton,
-      todosContainer,
+      listNameElement: this.#createListNameElement(listName),
+      taskBox: this.#createTaskBox(listId),
+      addTaskButton: this.#createAddTaskButton(listId),
+      sortButton: this.#createSortButton(listId),
+      doneButton: this.#createDoneButton(listId),
+      todosContainer: this.#createTodosElements(listId, todos),
     };
-  }
-
-  #appendElementsToList(list, elements) {
-    Object.values(elements).forEach((element) => {
-      list.appendChild(element);
-    });
   }
 
   #renderList({ listName, listId, todos }) {
     const elements = this.#createTodoListElements(listName, listId, todos);
-
-    elements.addTaskButton.onclick = () => {
-      if (elements.taskBox.value)
-        this.#createTodo(elements.taskBox.value, listId);
-    };
-
-    elements.sortButton.onclick = () => {
-      this.#sortAlphabetically(listId);
-    };
-
-    elements.doneButton.onclick = () => {
-      this.#sortByGroup(listId);
-    };
-
-    elements.taskBox.value = "";
     const list = document.createElement("section");
     list.id = listId;
 
-    this.#appendElementsToList(list, elements);
+    elements.addTaskButton.onclick = () => {
+      if (elements.taskBox.value) {
+        this.#createTodo(elements.taskBox.value, listId);
+        elements.taskBox.value = "";
+      }
+    };
+
+    this.#setupOnClick(elements.sortButton, this.#sortByAlpha, listId);
+    this.#setupOnClick(elements.doneButton, this.#sortByGroup, listId);
+    this.#appendElements(list, Object.values(elements));
     this.#todoListContainer.appendChild(list);
   }
 
   renderLists(todoLists) {
     this.#todoListContainer.replaceChildren();
-
     todoLists.forEach((todoList) => {
       this.#renderList(todoList);
     });
@@ -194,9 +166,11 @@ class TodoView {
   setupAddTodoList(createTodoList) {
     this.#addListButton.onclick = () => {
       const listName = this.#addListBox.value;
-      this.#addListBox.value = "";
 
-      if (listName) createTodoList(listName);
+      if (listName) {
+        createTodoList(listName);
+        this.#addListBox.value = "";
+      }
     };
   }
 
@@ -213,7 +187,7 @@ class TodoView {
   }
 
   setupSortAlphabetically(sortAlphabetically) {
-    this.#sortAlphabetically = sortAlphabetically;
+    this.#sortByAlpha = sortAlphabetically;
   }
 
   setupSortByGroup(sortByGroup) {

@@ -1,35 +1,10 @@
-const createTodo = ({ id, description, isDone }) => {
-  const todo = new Todo(description, id);
-
-  if (isDone) todo.toggleStatus();
-  return todo;
-};
-
-const createTodoList = ({ listName, listId, todos: todosDetails }) => {
-  const todoList = new TodoList(listName, listId);
-
-  todosDetails.forEach((todoDetails) => {
-    const todo = createTodo(todoDetails);
-    todoList.addTodo(todo);
-  });
-
-  return todoList;
-};
-
-const createTodoLists = (todoListsDetails, todoLists) => {
-  todoListsDetails.forEach((todoListDetails) => {
-    const todoList = createTodoList(todoListDetails);
-    todoLists.addTodoList(todoList);
-  });
-};
-
 const main = () => {
   const addListBox = document.getElementById("add-list-box");
   const addListButton = document.getElementById("add-list-button");
+  const todoListContainer = document.getElementById("todo-list");
 
   const todoIdGenerator = new IdGenerator("todo");
-
-  const todoView = new TodoView(addListBox, addListButton);
+  const todoView = new TodoView(addListBox, addListButton, todoListContainer);
   const todoLists = new TodoLists();
 
   const todoController = new TodoController(
