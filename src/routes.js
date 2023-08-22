@@ -4,6 +4,7 @@ const {
   sendTodos,
   updateTodos,
   serverStaticPage,
+  addTodoList
 } = require("./handlers.js");
 
 const METHODS = {
@@ -21,6 +22,11 @@ const ROUTES = [
     route: "^/scripts/",
     method: METHODS.get,
     handler: serveScripts,
+  },
+  {
+    route: "^/todos/add$",
+    method: METHODS.post,
+    handler: addTodoList,
   },
   {
     route: "^/todos$",

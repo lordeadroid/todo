@@ -5,9 +5,13 @@ class TodoView {
   #createTodo;
   #sortAlphabetically;
   #sortByGroup;
+  #addListBox;
+  #addListButton;
 
-  constructor() {
+  constructor(addListBox, addListButton) {
     this.#todoListContainer = document.getElementById("todo-list");
+    this.#addListBox = addListBox;
+    this.#addListButton = addListButton;
   }
 
   #createDeleteButton(todo) {
@@ -62,6 +66,7 @@ class TodoView {
 
   #createDoneButton(listId) {
     const doneButton = document.createElement("input");
+
     const values = [
       ["type", "button"],
       ["value", "Done Tasks"],
@@ -203,5 +208,14 @@ class TodoView {
 
   setupSortByGroup(sortByGroup) {
     this.#sortByGroup = sortByGroup;
+  }
+
+  setupCreateTodoList(createTodoList) {
+    this.#addListButton.onclick = () => {
+      const listName = this.#addListBox.value;
+      this.#addListBox.value = "";
+
+      if (listName) createTodoList(listName);
+    };
   }
 }

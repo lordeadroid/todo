@@ -3,16 +3,12 @@ class TodoController {
   #todoLists;
   #listIdGenerator;
   #todoIdGenerator;
-  #addListBox;
-  #addListButton;
 
-  constructor(todoView, todoLists, listId, todoId, addListBox, addListButton) {
+  constructor(todoView, todoLists, listId, todoId) {
     this.#todoView = todoView;
     this.#todoLists = todoLists;
     this.#listIdGenerator = listId;
     this.#todoIdGenerator = todoId;
-    this.#addListBox = addListBox;
-    this.#addListButton = addListButton;
   }
 
   #updateTodoDatabase(todoListsDetails) {
@@ -36,8 +32,16 @@ class TodoController {
   }
 
   #createTodoList(listName) {
-    const todoList = new TodoList(listName, this.#listIdGenerator.generate());
-    this.#todoLists.addTodoList(todoList);
+    fetch("/todos/add", {
+      method: "POST",
+      body: JSON.stringify({ listName }),
+    })
+      .then((res) => res.json())
+      .then(({ listId }) => {
+        const todoList = new TodoList(listName, listId);
+        this.#todoLists.addTodoList(todoList);
+        this.#displayTodos();
+      });
   }
 
   #displayTodos() {
@@ -47,13 +51,6 @@ class TodoController {
   }
 
   start() {
-    this.#addListButton.onclick = () => {
-      const listName = this.#addListBox.value;
-      this.#addListBox.value = "";
-      this.#createTodoList(listName);
-      this.#displayTodos();
-    };
-
     this.#todoView.setupAddNewTodo((todoDescription, listId) => {
       this.#createTodo(todoDescription, listId);
       this.#displayTodos();
@@ -78,6 +75,10 @@ class TodoController {
       this.#toggleGroupSort(listId);
       this.#displayTodos();
     });
+
+    this.#todoView.setupCreateTodoList((listName) =>
+      this.#createTodoList(listName)
+    );
 
     this.#displayTodos();
   }
