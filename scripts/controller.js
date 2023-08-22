@@ -15,6 +15,13 @@ class TodoController {
     this.#addListButton = addListButton;
   }
 
+  #updateTodoDatabase(todoListsDetails) {
+    fetch("/todos", {
+      method: "POST",
+      body: JSON.stringify(todoListsDetails),
+    });
+  }
+
   #toggleSortAlphabetically(listId) {
     this.#todoLists.toggleSortAlphabetically(listId);
   }
@@ -35,6 +42,7 @@ class TodoController {
 
   #displayTodos() {
     const todoListsDetails = this.#todoLists.getTodosDetails();
+    this.#updateTodoDatabase(todoListsDetails);
     this.#todoView.renderLists(todoListsDetails);
   }
 

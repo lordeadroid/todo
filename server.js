@@ -9,28 +9,16 @@ const log = (request) => {
   return request;
 };
 
-const setupServer = (env) => {
+const main = () => {
   const server = http.createServer((request, response) => {
     log(request);
-    route(request, response, env);
+    route(request, response);
   });
 
   const PORT = 9000;
   const TIME = new Date().toTimeString();
   server.listen(PORT, () => {
     console.log("Listening on PORT:", PORT, TIME);
-  });
-};
-
-const main = () => {
-  const databasePath = "./database/todos.json";
-  const encoding = "utf-8";
-
-  readFile(databasePath, encoding, (_, content = "[]") => {
-    const todoLists = JSON.parse(content);
-    const todoStorage = new TodoStorage(todoLists, databasePath, writeFileSync);
-
-    setupServer({ todoStorage });
   });
 };
 

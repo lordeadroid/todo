@@ -1,4 +1,4 @@
-const { readFile } = require("fs");
+const fs = require("fs");
 
 const { HEADERS, MIME_TYPES } = require("./constants.js");
 
@@ -15,7 +15,7 @@ const handleInvalidMethod = (_, response) => {
 const serveHomePage = (_, response) => {
   const path = "./index.html";
 
-  readFile(path, (_, content) => {
+  fs.readFile(path, (_, content) => {
     response.setHeader(HEADERS.contentType, MIME_TYPES.html);
     response.end(content);
   });
@@ -24,47 +24,40 @@ const serveHomePage = (_, response) => {
 const serveScripts = (request, response) => {
   const path = `.${request.url}`;
 
-  readFile(path, (_, content) => {
+  fs.readFile(path, (_, content) => {
     response.setHeader(HEADERS.contentType, MIME_TYPES.js);
     response.end(content);
   });
 };
 
-const sendTodos = (_, response, env) => {
-  const todos = env.todoStorage.getTodos();
+const sendTodos = (_, response) => {
+  const path = "./database/todos.json";
 
-  response.setHeader(HEADERS.contentType, MIME_TYPES.json);
-  response.end(JSON.stringify(todos));
-};
-
-const createList = (listName, env) => {
-  const todos = [];
-
-  return { listName, listId, todos };
-};
-
-const addTodos = (request, response, env) => {
-  let listName = "";
-
-  request.on("data", (data) => {
-    listName += data;
+  fs.readFile(path, (_, todosDetails) => {
+    response.setHeader(HEADERS.contentType, MIME_TYPES.json);
+    response.end(todosDetails);
   });
+};
+
+const updateTodos = (request, response) => {
+  let todoListsDetails = "";
+
+  request.on("data", (chunk) => (todoListsDetails += chunk));
 
   request.on("end", () => {
-    const list = createList(listName, env);
-    env.todoStorage.addTodos(list);
-    const todos = env.todoStorage.getTodos();
+    const path = "./database/todos.json";
 
-    response.statusCode = 201;
-    response.setHeader(HEADERS.contentType, MIME_TYPES.json);
-    response.end(JSON.stringify(todos));
+    fs.writeFile(path, todoListsDetails, () => {
+      response.statusCode = 201;
+      response.end();
+    });
   });
 };
 
-const serverStaticPage = (request, response, env) => {
+const serverStaticPage = (request, response) => {
   const path = `.${request.url}`;
 
-  readFile(path, (error, content) => {
+  fs.readFile(path, (error, content) => {
     if (error) {
       return handlePageNotFound(request, response);
     }
@@ -79,6 +72,6 @@ module.exports = {
   handleInvalidMethod,
   serveScripts,
   sendTodos,
-  addTodos,
+  updateTodos,
   serverStaticPage,
 };
