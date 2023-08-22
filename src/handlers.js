@@ -46,7 +46,6 @@ const updateTodos = (request, response) => {
 
   request.on("end", () => {
     const path = "./database/todos.json";
-    console.log(todoListsDetails);
 
     fs.writeFile(path, todoListsDetails, () => {
       response.statusCode = 201;

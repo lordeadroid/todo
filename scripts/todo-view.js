@@ -163,7 +163,8 @@ class TodoView {
     const elements = this.#createTodoListElements(listName, listId, todos);
 
     elements.addTaskButton.onclick = () => {
-      this.#createTodo(elements.taskBox.value, listId);
+      if (elements.taskBox.value)
+        this.#createTodo(elements.taskBox.value, listId);
     };
 
     elements.sortButton.onclick = () => {
@@ -190,7 +191,16 @@ class TodoView {
     });
   }
 
-  setupAddNewTodo(createTodo) {
+  setupAddTodoList(createTodoList) {
+    this.#addListButton.onclick = () => {
+      const listName = this.#addListBox.value;
+      this.#addListBox.value = "";
+
+      if (listName) createTodoList(listName);
+    };
+  }
+
+  setupAddTodo(createTodo) {
     this.#createTodo = createTodo;
   }
 
@@ -208,14 +218,5 @@ class TodoView {
 
   setupSortByGroup(sortByGroup) {
     this.#sortByGroup = sortByGroup;
-  }
-
-  setupCreateTodoList(createTodoList) {
-    this.#addListButton.onclick = () => {
-      const listName = this.#addListBox.value;
-      this.#addListBox.value = "";
-
-      if (listName) createTodoList(listName);
-    };
   }
 }

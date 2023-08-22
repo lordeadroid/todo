@@ -1,13 +1,12 @@
 class TodoController {
   #todoView;
   #todoLists;
-  #listIdGenerator;
+
   #todoIdGenerator;
 
-  constructor(todoView, todoLists, listId, todoId) {
+  constructor(todoView, todoLists, todoId) {
     this.#todoView = todoView;
     this.#todoLists = todoLists;
-    this.#listIdGenerator = listId;
     this.#todoIdGenerator = todoId;
   }
 
@@ -51,7 +50,11 @@ class TodoController {
   }
 
   start() {
-    this.#todoView.setupAddNewTodo((todoDescription, listId) => {
+    this.#todoView.setupAddTodoList((listName) =>
+      this.#createTodoList(listName)
+    );
+
+    this.#todoView.setupAddTodo((todoDescription, listId) => {
       this.#createTodo(todoDescription, listId);
       this.#displayTodos();
     });
@@ -75,10 +78,6 @@ class TodoController {
       this.#toggleGroupSort(listId);
       this.#displayTodos();
     });
-
-    this.#todoView.setupCreateTodoList((listName) =>
-      this.#createTodoList(listName)
-    );
 
     this.#displayTodos();
   }
