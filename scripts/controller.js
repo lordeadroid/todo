@@ -70,5 +70,7 @@ class TodoController {
       this.#toggleGroupSort(listId);
       this.#displayTodos();
     });
+
+    this.#displayTodos();
   }
 }
