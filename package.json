@@ -5,12 +5,15 @@
   "main": "todo.js",
   "scripts": {
     "lint": "eslint .",
-    "server": "node --watch server.js" 
+    "server": "node --watch server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.45.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }

@@ -4,14 +4,9 @@ const { Todo } = require("./todo.js");
 const { TodoList } = require("./todo-list.js");
 const { HEADERS, MIME_TYPES } = require("./constants.js");
 
-const handlePageNotFound = (_, response) => {
-  response.statusCode = 404;
-  response.end();
-};
-
 const handleInvalidMethod = (_, response) => {
-  response.statusCode = 405;
-  response.end("Invalid Method");
+  response.status = 405;
+  response.send("Invalid Method");
 };
 
 const serveHomePage = (_, response) => {
@@ -19,15 +14,6 @@ const serveHomePage = (_, response) => {
 
   readFile(path, (_, content) => {
     response.setHeader(HEADERS.contentType, MIME_TYPES.html);
-    response.end(content);
-  });
-};
-
-const serveScripts = (request, response) => {
-  const path = `.${request.url}`;
-
-  readFile(path, (_, content) => {
-    response.setHeader(HEADERS.contentType, MIME_TYPES.js);
     response.end(content);
   });
 };
@@ -41,26 +27,14 @@ const sendTodos = (_, response) => {
   });
 };
 
-const updateTodos = (request, response, todoLists) => {
+const updateTodos = (request, response) => {
+  const todoLists = request.app.todoLists;
   const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
   const path = "./database/todos.json";
 
   writeFile(path, todoListsDetails, () => {
-    response.statusCode = 201;
+    response.status = 201;
     response.end();
-  });
-};
-
-const serverStaticPage = (request, response) => {
-  const path = `.${request.url}`;
-
-  readFile(path, (error, content) => {
-    if (error) {
-      return handlePageNotFound(request, response);
-    }
-
-    response.setHeader(HEADERS.contentType, MIME_TYPES.js);
-    response.end(content);
   });
 };
 
@@ -72,9 +46,11 @@ const updateTodoDatabase = (todoListsDetails) => {
   });
 };
 
-const addTodoList = (request, response, todoLists) => {
-  const { listName } = JSON.parse(request.body);
+const addTodoList = (request, response) => {
+  console.log(request.body);
 
+  const todoLists = request.app.todoLists;
+  const { listName } = request.body;
   const listId = todoLists.getNumberOfTodoLists();
   const todoList = new TodoList(listName, listId);
 
@@ -86,10 +62,11 @@ const addTodoList = (request, response, todoLists) => {
   response.end(JSON.stringify({ listId }));
 };
 
-const addTodo = (request, response, todoLists) => {
-  const { todoDescription } = JSON.parse(request.body);
+const addTodo = (request, response) => {
+  const todoLists = request.app.todoLists;
+  const { todoDescription } = request.body;
 
-  const listId = +request.url.split("/").pop();
+  const listId = +request.params.listId;
   const todoId = todoLists.getNumberOfTodos();
   const todo = new Todo(todoDescription, todoId);
 
@@ -97,50 +74,39 @@ const addTodo = (request, response, todoLists) => {
   const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
   updateTodoDatabase(todoListsDetails);
 
-  response.statusCode = 201;
+  response.status = 201;
   response.end(JSON.stringify({ todoId }));
 };
 
-const getIds = (url) => {
-  const [, , listId, , todoId] = url.split("/");
-
-  return {
-    listId: +listId,
-    todoId: +todoId,
-  };
-};
-
-const deleteTodo = (request, response, todoLists) => {
-  const { listId, todoId } = getIds(request.url);
-
-  todoLists.deleteTodo(listId, todoId);
+const deleteTodo = (request, response) => {
+  const todoLists = request.app.todoLists;
+  const { listId, todoId } = request.params;
+  todoLists.deleteTodo(+listId, +todoId);
 
   const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
   updateTodoDatabase(todoListsDetails);
 
-  response.statusCode = 204;
+  response.status = 204;
   response.end();
 };
 
-const toggleTodoStatus = (request, response, todoLists) => {
-  const { listId, todoId } = getIds(request.url);
-
-  todoLists.toggleTodoStatus(listId, todoId);
+const toggleTodoStatus = (request, response) => {
+  const todoLists = request.app.todoLists;
+  const { listId, todoId } = request.params;
+  todoLists.toggleTodoStatus(+listId, +todoId);
 
   const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
   updateTodoDatabase(todoListsDetails);
 
-  response.statusCode = 204;
+  response.status = 204;
   response.end();
 };
 
 module.exports = {
   serveHomePage,
   handleInvalidMethod,
-  serveScripts,
   sendTodos,
   updateTodos,
-  serverStaticPage,
   addTodoList,
   addTodo,
   deleteTodo,

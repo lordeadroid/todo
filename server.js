@@ -1,46 +1,54 @@
-const http = require("node:http");
+const express = require("express");
 
-const { route } = require("./src/router.js");
 const { readFile } = require("fs");
 const { createTodoLists } = require("./src/parser.js");
 const { TodoLists } = require("./src/todo-lists.js");
 
-const log = (request) => {
-  console.log(request.method, request.url);
-  return request;
+const {
+  serveHomePage,
+  sendTodos,
+  updateTodos,
+  addTodoList,
+  addTodo,
+  deleteTodo,
+  toggleTodoStatus,
+} = require("./src/handlers.js");
+
+const logRequest = (req, res, next) => {
+  console.log(req.method, req.path);
+  next();
 };
 
-const readRequestBody = (request, routeHandler) => {
-  let body = "";
-  request.on("data", (chunk) => (body += chunk));
-  request.on("end", () => {
-    request.body = body;
-    routeHandler();
-  });
+const setupRoutes = (app) => {
+  app.use(logRequest);
+  app.use(express.json());
+  app.get("/", serveHomePage);
+  app.get("/todo-lists", sendTodos);
+  app.post("/todo-lists", addTodoList);
+  app.put("/todo-lists", updateTodos);
+  app.post("/todo-lists/:listId", addTodo);
+  app.delete("/todo-lists/:listId/todos/:todoId", deleteTodo);
+  app.patch("/todo-lists/:listId/todos/:todoId", toggleTodoStatus);
+  app.use(express.static("./"));
 };
 
 const setupServer = (todoLists) => {
-  const server = http.createServer((request, response) => {
-    log(request);
-    readRequestBody(request, () => {
-      route(request, response, todoLists);
-    });
-  });
+  const app = express();
+  app.todoLists = todoLists;
+  setupRoutes(app);
 
   const PORT = 9000;
-  const TIME = new Date().toTimeString();
-  server.listen(PORT, () => {
+  app.listen(PORT, () => {
+    const TIME = new Date().toTimeString();
     console.log("Listening on PORT:", PORT, TIME);
   });
 };
 
 const main = () => {
   const path = "./database/todos.json";
-  const encoding = "utf-8";
-
   const todoLists = new TodoLists();
 
-  readFile(path, encoding, (_, content) => {
+  readFile(path, "utf-8", (_, content) => {
     const todoListsDetails = JSON.parse(content);
 
     createTodoLists(todoListsDetails, todoLists);

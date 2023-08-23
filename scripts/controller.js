@@ -26,6 +26,9 @@ class TodoController {
     fetch(`/todo-lists/${listId}`, {
       method: "POST",
       body: JSON.stringify({ todoDescription }),
+      headers: {
+        "content-type": "application/json",
+      },
     })
       .then((response) => response.json())
       .then(({ todoId }) => {
@@ -39,6 +42,9 @@ class TodoController {
     fetch("/todo-lists", {
       method: "POST",
       body: JSON.stringify({ listName }),
+      headers: {
+        "content-type": "application/json",
+      },
     })
       .then((response) => response.json())
       .then(({ listId }) => {
