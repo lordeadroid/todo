@@ -9,6 +9,26 @@ class TodoController {
     this.#todoDataFetcher = todoDataFetcher;
   }
 
+  #extractId(elementId) {
+    return +elementId.split("-").pop();
+  }
+
+  #displayTodos() {
+    const todoListsDetails = this.#todoLists.getTodosDetails();
+    this.#todoView.renderLists(todoListsDetails);
+  }
+
+  #removeTodo(listId, todoId) {
+    this.#todoLists.deleteTodo(listId, todoId);
+    this.#displayTodos();
+  }
+
+  #onRemoveTodo(listId, todoId) {
+    this.#todoDataFetcher.removeTodo(listId, todoId, (listId, todoId) => {
+      this.#removeTodo(listId, todoId);
+    });
+  }
+
   #toggleSortAlphabetically(listId) {
     this.#todoLists.toggleSortAlphabetically(listId);
   }
@@ -17,20 +37,27 @@ class TodoController {
     this.#todoLists.toggleGroupSort(listId);
   }
 
-  #createTodo(todoDescription, listId) {
-    fetch(`/todo-lists/${listId}`, {
-      method: "POST",
-      body: JSON.stringify({ todoDescription }),
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(({ todoId }) => {
-        const todo = new Todo(todoDescription, todoId);
-        this.#todoLists.addTodo(todo, listId);
-        this.#displayTodos();
-      });
+  #toggleTodoStatus(listId, todoId) {
+    this.#todoLists.toggleTodoStatus(listId, todoId);
+    this.#displayTodos();
+  }
+
+  #onToggleTodoStatus(listId, todoId) {
+    this.#todoDataFetcher.toggleTodoStatus(listId, todoId, (listId, todoId) => {
+      this.#toggleTodoStatus(listId, todoId);
+    });
+  }
+
+  #createTodo(todoDescription, listId, todoId) {
+    const todo = new Todo(todoDescription, todoId);
+    this.#todoLists.addTodo(todo, listId);
+    this.#displayTodos();
+  }
+
+  #onAddTodo(des, listId) {
+    this.#todoDataFetcher.addTodo(des, listId, (des, listId, todoId) => {
+      this.#createTodo(des, listId, todoId);
+    });
   }
 
   #createTodoList(listName, listId) {
@@ -39,55 +66,34 @@ class TodoController {
     this.#displayTodos();
   }
 
-  #displayTodos() {
-    const todoListsDetails = this.#todoLists.getTodosDetails();
-    this.#todoView.renderLists(todoListsDetails);
-  }
-
-  #extractId(elementId) {
-    return +elementId.split("-").pop();
-  }
-
-  #fetchTodoListData(listName) {
-    this.#todoDataFetcher.setupAddTodoList(listName, (listName, listId) => {
+  #onAddTodoList(listName) {
+    this.#todoDataFetcher.addTodoList(listName, (listName, listId) => {
       this.#createTodoList(listName, listId);
     });
-  }
+    }
 
   start() {
-    this.#todoView.setupAddTodoList((listName) =>
-      this.#fetchTodoListData(listName)
-    );
+    this.#todoView.setupAddTodoList((listName) => {
+      this.#onAddTodoList(listName);
+    });
 
     this.#todoView.setupAddTodo((todoDescription, listElementId) => {
       const listId = this.#extractId(listElementId);
-
-      this.#createTodo(todoDescription, listId);
-      this.#displayTodos();
+      this.#onAddTodo(todoDescription, listId);
     });
 
     this.#todoView.setupToggleListener((listElementId, todoElementId) => {
       const listId = this.#extractId(listElementId);
       const todoId = this.#extractId(todoElementId);
 
-      fetch(`/todo-lists/${listId}/todos/${todoId}`, {
-        method: "PATCH",
-      }).then(() => {
-        this.#todoLists.toggleTodoStatus(listId, todoId);
-        this.#displayTodos();
-      });
+      this.#onToggleTodoStatus(listId, todoId);
     });
 
     this.#todoView.setupRemoveTodoListener((listElementId, todoElementId) => {
       const listId = this.#extractId(listElementId);
       const todoId = this.#extractId(todoElementId);
 
-      fetch(`/todo-lists/${listId}/todos/${todoId}`, {
-        method: "DELETE",
-      }).then(() => {
-        this.#todoLists.deleteTodo(listId, todoId);
-        this.#displayTodos();
-      });
+      this.#onRemoveTodo(listId, todoId);
     });
 
     this.#todoView.setupSortAlphabetically((listElementId) => {
