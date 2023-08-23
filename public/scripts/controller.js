@@ -1,10 +1,12 @@
 class TodoController {
   #todoView;
   #todoLists;
+  #todoDataFetcher;
 
-  constructor(todoView, todoLists) {
+  constructor(todoView, todoLists, todoDataFetcher) {
     this.#todoView = todoView;
     this.#todoLists = todoLists;
+    this.#todoDataFetcher = todoDataFetcher;
   }
 
   #toggleSortAlphabetically(listId) {
@@ -31,20 +33,10 @@ class TodoController {
       });
   }
 
-  #createTodoList(listName) {
-    fetch("/todo-lists", {
-      method: "POST",
-      body: JSON.stringify({ listName }),
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(({ listId }) => {
-        const todoList = new TodoList(listName, listId);
-        this.#todoLists.addTodoList(todoList);
-        this.#displayTodos();
-      });
+  #createTodoList(listName, listId) {
+    const todoList = new TodoList(listName, listId);
+    this.#todoLists.addTodoList(todoList);
+    this.#displayTodos();
   }
 
   #displayTodos() {
@@ -56,9 +48,15 @@ class TodoController {
     return +elementId.split("-").pop();
   }
 
+  #fetchTodoListData(listName) {
+    this.#todoDataFetcher.setupAddTodoList(listName, (listName, listId) => {
+      this.#createTodoList(listName, listId);
+    });
+  }
+
   start() {
     this.#todoView.setupAddTodoList((listName) =>
-      this.#createTodoList(listName)
+      this.#fetchTodoListData(listName)
     );
 
     this.#todoView.setupAddTodo((todoDescription, listElementId) => {
