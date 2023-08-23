@@ -31,7 +31,6 @@ const main = () => {
 
   readFile(path, encoding, (_, content) => {
     const todoListsDetails = JSON.parse(content);
-
     createTodoLists(todoListsDetails, todoLists);
     setupServer(todoLists);
   });

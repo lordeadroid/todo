@@ -1,12 +1,10 @@
 class TodoController {
   #todoView;
   #todoLists;
-  #todoIdGenerator;
 
-  constructor(todoView, todoLists, todoId) {
+  constructor(todoView, todoLists) {
     this.#todoView = todoView;
     this.#todoLists = todoLists;
-    this.#todoIdGenerator = todoId;
   }
 
   #updateTodoDatabase(todoListsDetails) {

@@ -1,12 +1,12 @@
 class TodoView {
-  #todoListContainer;
-  #changeTodoStatus;
-  #removeTodo;
-  #createTodo;
-  #sortByAlpha;
-  #sortByGroup;
   #addListBox;
   #addListButton;
+  #todoListContainer;
+  #createTodo;
+  #removeTodo;
+  #sortByAlpha;
+  #sortByGroup;
+  #changeTodoStatus;
 
   constructor(addListBox, addListButton, todoListContainer) {
     this.#addListBox = addListBox;

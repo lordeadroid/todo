@@ -27,8 +27,8 @@ const ROUTES = [
   },
   {
     route: "^/todo-lists$",
-    method: METHODS.put,
-    handler: updateTodos,
+    method: METHODS.get,
+    handler: sendTodos,
   },
   {
     route: "^/todo-lists$",
@@ -37,8 +37,8 @@ const ROUTES = [
   },
   {
     route: "^/todo-lists$",
-    method: METHODS.get,
-    handler: sendTodos,
+    method: METHODS.put,
+    handler: updateTodos,
   },
   {
     route: "^/todo-lists/\\d+$",

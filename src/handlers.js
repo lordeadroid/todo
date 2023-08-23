@@ -1,7 +1,8 @@
-const fs = require("fs");
-const { HEADERS, MIME_TYPES } = require("./constants.js");
-const { TodoList } = require("./todo-list.js");
+const { readFile, writeFile } = require("fs");
+
 const { Todo } = require("./todo.js");
+const { TodoList } = require("./todo-list.js");
+const { HEADERS, MIME_TYPES } = require("./constants.js");
 
 const handlePageNotFound = (_, response) => {
   response.statusCode = 404;
@@ -16,7 +17,7 @@ const handleInvalidMethod = (_, response) => {
 const serveHomePage = (_, response) => {
   const path = "./index.html";
 
-  fs.readFile(path, (_, content) => {
+  readFile(path, (_, content) => {
     response.setHeader(HEADERS.contentType, MIME_TYPES.html);
     response.end(content);
   });
@@ -25,7 +26,7 @@ const serveHomePage = (_, response) => {
 const serveScripts = (request, response) => {
   const path = `.${request.url}`;
 
-  fs.readFile(path, (_, content) => {
+  readFile(path, (_, content) => {
     response.setHeader(HEADERS.contentType, MIME_TYPES.js);
     response.end(content);
   });
@@ -34,7 +35,7 @@ const serveScripts = (request, response) => {
 const sendTodos = (_, response) => {
   const path = "./database/todos.json";
 
-  fs.readFile(path, (_, todosListsDetails) => {
+  readFile(path, (_, todosListsDetails) => {
     response.setHeader(HEADERS.contentType, MIME_TYPES.json);
     response.end(todosListsDetails);
   });
@@ -47,7 +48,7 @@ const updateTodos = (request, response) => {
   request.on("end", () => {
     const path = "./database/todos.json";
 
-    fs.writeFile(path, todoListsDetails, () => {
+    writeFile(path, todoListsDetails, () => {
       response.statusCode = 201;
       response.end();
     });
@@ -57,7 +58,7 @@ const updateTodos = (request, response) => {
 const serverStaticPage = (request, response) => {
   const path = `.${request.url}`;
 
-  fs.readFile(path, (error, content) => {
+  readFile(path, (error, content) => {
     if (error) {
       return handlePageNotFound(request, response);
     }
@@ -70,7 +71,7 @@ const serverStaticPage = (request, response) => {
 const updateTodoDatabase = (todoListsDetails) => {
   const path = "./database/todos.json";
 
-  fs.writeFile(path, todoListsDetails, () => {
+  writeFile(path, todoListsDetails, () => {
     console.log("database updated");
   });
 };
