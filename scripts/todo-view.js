@@ -36,7 +36,6 @@ class TodoView {
     const deleteButton = document.createElement("input");
     deleteButton.type = "button";
     deleteButton.value = "delete";
-    deleteButton.id = todo.id;
     deleteButton.classList = "delete-button";
 
     this.#setupOnClick(deleteButton, this.#removeTodo, todo);
@@ -46,7 +45,6 @@ class TodoView {
   #createTodoElement(todo) {
     const todoElement = document.createElement("p");
     todoElement.classList = "todos";
-    todoElement.id = todo.id;
     todoElement.innerText = todo.description;
 
     return todoElement;
@@ -57,13 +55,17 @@ class TodoView {
     todosContainer.setAttribute("id", `${listId}-todos`);
 
     todos.forEach((todo) => {
+      const todoId = `todo-${todo.id}`;
+      const todoContainer = document.createElement("div");
+      todoContainer.id = todoId;
       const todoElement = this.#createTodoElement(todo);
       const deleteButton = this.#createDeleteButton(todo);
 
       if (todo.isDone) todoElement.classList.add("done");
-      this.#setupOnClick(todoElement, this.#changeTodoStatus, listId, todo.id);
-      this.#setupOnClick(deleteButton, this.#removeTodo, listId, todo.id);
-      this.#appendElements(todosContainer, [todoElement, deleteButton]);
+      this.#setupOnClick(todoElement, this.#changeTodoStatus, listId, todoId);
+      this.#setupOnClick(deleteButton, this.#removeTodo, listId, todoId);
+      this.#appendElements(todoContainer, [todoElement, deleteButton]);
+      todosContainer.appendChild(todoContainer);
     });
 
     return todosContainer;
@@ -139,19 +141,20 @@ class TodoView {
   }
 
   #renderList({ listName, listId, todos }) {
-    const elements = this.#createTodoListElements(listName, listId, todos);
+    const id = `list-${listId}`;
+    const elements = this.#createTodoListElements(listName, id, todos);
     const list = document.createElement("section");
-    list.id = listId;
+    list.id = id;
 
     elements.addTaskButton.onclick = () => {
       if (elements.taskBox.value) {
-        this.#createTodo(elements.taskBox.value, listId);
+        this.#createTodo(elements.taskBox.value, id);
         elements.taskBox.value = "";
       }
     };
 
-    this.#setupOnClick(elements.sortButton, this.#sortByAlpha, listId);
-    this.#setupOnClick(elements.doneButton, this.#sortByGroup, listId);
+    this.#setupOnClick(elements.sortButton, this.#sortByAlpha, id);
+    this.#setupOnClick(elements.doneButton, this.#sortByGroup, id);
     this.#appendElements(list, Object.values(elements));
     this.#todoListContainer.appendChild(list);
   }

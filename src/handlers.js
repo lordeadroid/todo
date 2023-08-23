@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { HEADERS, MIME_TYPES } = require("./constants.js");
 const { TodoList } = require("./todo-list.js");
+const { Todo } = require("./todo.js");
 
 const handlePageNotFound = (_, response) => {
   response.statusCode = 404;
@@ -43,7 +44,6 @@ const updateTodos = (request, response) => {
   let todoListsDetails = "";
 
   request.on("data", (chunk) => (todoListsDetails += chunk));
-
   request.on("end", () => {
     const path = "./database/todos.json";
 
@@ -79,17 +79,38 @@ const addTodoList = (request, response, todoLists) => {
   let requestBody = "";
 
   request.on("data", (chunk) => (requestBody += chunk));
-
   request.on("end", () => {
     const { listName } = JSON.parse(requestBody);
+
     const listId = todoLists.getNumberOfTodoLists();
     const todoList = new TodoList(listName, listId);
+
     todoLists.addTodoList(todoList);
     const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
     updateTodoDatabase(todoListsDetails);
 
     response.statusCode = 201;
     response.end(JSON.stringify({ listId }));
+  });
+};
+
+const addTodo = (request, response, todoLists) => {
+  let requestBody = "";
+
+  request.on("data", (chunk) => (requestBody += chunk));
+  request.on("end", () => {
+    const { todoDescription } = JSON.parse(requestBody);
+
+    const listId = +request.url.split("/").pop();
+    const todoId = todoLists.getNumberOfTodos();
+    const todo = new Todo(todoDescription, todoId);
+
+    todoLists.addTodo(todo, listId);
+    const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
+    updateTodoDatabase(todoListsDetails);
+
+    response.statusCode = 201;
+    response.end(JSON.stringify({ todoId }));
   });
 };
 
@@ -101,4 +122,5 @@ module.exports = {
   updateTodos,
   serverStaticPage,
   addTodoList,
+  addTodo,
 };

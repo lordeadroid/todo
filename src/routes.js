@@ -4,12 +4,14 @@ const {
   sendTodos,
   updateTodos,
   serverStaticPage,
-  addTodoList
+  addTodoList,
+  addTodo,
 } = require("./handlers.js");
 
 const METHODS = {
   get: "GET",
   post: "POST",
+  put: "PUT",
 };
 
 const ROUTES = [
@@ -24,19 +26,24 @@ const ROUTES = [
     handler: serveScripts,
   },
   {
-    route: "^/todos/add$",
+    route: "^/todo-lists$",
+    method: METHODS.put,
+    handler: updateTodos,
+  },
+  {
+    route: "^/todo-lists$",
     method: METHODS.post,
     handler: addTodoList,
   },
   {
-    route: "^/todos$",
+    route: "^/todo-lists$",
     method: METHODS.get,
     handler: sendTodos,
   },
   {
-    route: "^/todos$",
+    route: "^/todo-lists/\\d+$",
     method: METHODS.post,
-    handler: updateTodos,
+    handler: addTodo,
   },
   {
     route: "/favicon.ico",

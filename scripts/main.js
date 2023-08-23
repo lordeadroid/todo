@@ -13,7 +13,7 @@ const main = () => {
     todoIdGenerator
   );
 
-  fetch("/todos")
+  fetch("/todo-lists")
     .then((response) => response.json())
     .then((todoListsDetails) => {
       createTodoLists(todoListsDetails, todoLists);

@@ -1,7 +1,6 @@
 class TodoController {
   #todoView;
   #todoLists;
-
   #todoIdGenerator;
 
   constructor(todoView, todoLists, todoId) {
@@ -11,8 +10,8 @@ class TodoController {
   }
 
   #updateTodoDatabase(todoListsDetails) {
-    fetch("/todos", {
-      method: "POST",
+    fetch("/todo-lists", {
+      method: "PUT",
       body: JSON.stringify(todoListsDetails),
     });
   }
@@ -26,16 +25,24 @@ class TodoController {
   }
 
   #createTodo(todoDescription, listId) {
-    const todo = new Todo(todoDescription, this.#todoIdGenerator.generate());
-    this.#todoLists.addTodo(todo, listId);
+    fetch(`/todo-lists/${listId}`, {
+      method: "POST",
+      body: JSON.stringify({ todoDescription }),
+    })
+      .then((response) => response.json())
+      .then(({ todoId }) => {
+        const todo = new Todo(todoDescription, todoId);
+        this.#todoLists.addTodo(todo, listId);
+        this.#displayTodos();
+      });
   }
 
   #createTodoList(listName) {
-    fetch("/todos/add", {
+    fetch("/todo-lists", {
       method: "POST",
       body: JSON.stringify({ listName }),
     })
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then(({ listId }) => {
         const todoList = new TodoList(listName, listId);
         this.#todoLists.addTodoList(todoList);
@@ -49,32 +56,48 @@ class TodoController {
     this.#todoView.renderLists(todoListsDetails);
   }
 
+  #extractId(elementId) {
+    return +elementId.split("-").pop();
+  }
+
   start() {
     this.#todoView.setupAddTodoList((listName) =>
       this.#createTodoList(listName)
     );
 
-    this.#todoView.setupAddTodo((todoDescription, listId) => {
+    this.#todoView.setupAddTodo((todoDescription, listElementId) => {
+      const listId = this.#extractId(listElementId);
+
       this.#createTodo(todoDescription, listId);
       this.#displayTodos();
     });
 
-    this.#todoView.setupToggleListener((listId, todoId) => {
+    this.#todoView.setupToggleListener((listElementId, todoElementId) => {
+      const listId = this.#extractId(listElementId);
+      const todoId = this.#extractId(todoElementId);
+
       this.#todoLists.toggleTodoStatus(listId, todoId);
       this.#displayTodos();
     });
 
-    this.#todoView.setupRemoveTodoListener((listId, todoId) => {
+    this.#todoView.setupRemoveTodoListener((listElementId, todoElementId) => {
+      const listId = this.#extractId(listElementId);
+      const todoId = this.#extractId(todoElementId);
+
       this.#todoLists.deleteTodo(listId, todoId);
       this.#displayTodos();
     });
 
-    this.#todoView.setupSortAlphabetically((listId) => {
+    this.#todoView.setupSortAlphabetically((listElementId) => {
+      const listId = this.#extractId(listElementId);
+
       this.#toggleSortAlphabetically(listId);
       this.#displayTodos();
     });
 
-    this.#todoView.setupSortByGroup((listId) => {
+    this.#todoView.setupSortByGroup((listElementId) => {
+      const listId = this.#extractId(listElementId);
+
       this.#toggleGroupSort(listId);
       this.#displayTodos();
     });
