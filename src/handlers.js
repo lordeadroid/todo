@@ -33,7 +33,7 @@ const addTodoList = (req, res) => {
   const todoList = new TodoList(listName, listId);
 
   todoLists.addTodoList(todoList);
-  updateTodoDatabase(todoListsDetails.getTodosDetails());
+  updateTodoDatabase(todoLists.getTodosDetails());
 
   res.status(201).json({ listId });
 };
@@ -47,7 +47,7 @@ const addTodo = (req, res) => {
   const todo = new Todo(todoDescription, todoId);
 
   todoLists.addTodo(todo, listId);
-  updateTodoDatabase(todoListsDetails.getTodosDetails());
+  updateTodoDatabase(todoLists.getTodosDetails());
 
   res.status(201).json({ todoId });
 };
@@ -56,7 +56,7 @@ const deleteTodo = (req, res) => {
   const todoLists = req.app.todoLists;
   const { listId, todoId } = req.params;
   todoLists.deleteTodo(+listId, +todoId);
-  updateTodoDatabase(todoListsDetails.getTodosDetails());
+  updateTodoDatabase(todoLists.getTodosDetails());
 
   res.status(204).end();
 };
@@ -65,7 +65,7 @@ const toggleTodoStatus = (req, res) => {
   const todoLists = req.app.todoLists;
   const { listId, todoId } = req.params;
   todoLists.toggleTodoStatus(+listId, +todoId);
-  updateTodoDatabase(todoListsDetails.getTodosDetails());
+  updateTodoDatabase(todoLists.getTodosDetails());
 
   res.status(204).end();
 };
