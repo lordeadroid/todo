@@ -1,20 +1,18 @@
+const { readFile } = require("fs");
 const express = require("express");
 
-const { readFile } = require("fs");
-const { createTodoLists } = require("./src/parser.js");
 const { TodoLists } = require("./src/todo-lists.js");
+const { createTodoLists } = require("./src/parser.js");
 
 const {
-  serveHomePage,
   sendTodos,
-  updateTodos,
   addTodoList,
   addTodo,
   deleteTodo,
   toggleTodoStatus,
 } = require("./src/handlers.js");
 
-const logRequest = (req, res, next) => {
+const logRequest = (req, _, next) => {
   console.log(req.method, req.path);
   next();
 };
@@ -22,14 +20,12 @@ const logRequest = (req, res, next) => {
 const setupRoutes = (app) => {
   app.use(logRequest);
   app.use(express.json());
-  app.get("/", serveHomePage);
   app.get("/todo-lists", sendTodos);
   app.post("/todo-lists", addTodoList);
-  app.put("/todo-lists", updateTodos);
   app.post("/todo-lists/:listId", addTodo);
   app.delete("/todo-lists/:listId/todos/:todoId", deleteTodo);
   app.patch("/todo-lists/:listId/todos/:todoId", toggleTodoStatus);
-  app.use(express.static("./"));
+  app.use(express.static("public"));
 };
 
 const setupServer = (todoLists) => {

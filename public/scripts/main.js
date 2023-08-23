@@ -8,7 +8,7 @@ const main = () => {
   const todoController = new TodoController(todoView, todoLists);
 
   fetch("/todo-lists")
-    .then((response) => response.json())
+    .then((res) => res.json())
     .then((todoListsDetails) => {
       createTodoLists(todoListsDetails, todoLists);
       todoController.start();

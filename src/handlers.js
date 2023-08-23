@@ -4,109 +4,75 @@ const { Todo } = require("./todo.js");
 const { TodoList } = require("./todo-list.js");
 const { HEADERS, MIME_TYPES } = require("./constants.js");
 
-const handleInvalidMethod = (_, response) => {
-  response.status = 405;
-  response.send("Invalid Method");
+const handleInvalidMethod = (_, res) => {
+  res.status(405).send("Invalid Method");
 };
 
-const serveHomePage = (_, response) => {
-  const path = "./index.html";
-
-  readFile(path, (_, content) => {
-    response.setHeader(HEADERS.contentType, MIME_TYPES.html);
-    response.end(content);
-  });
-};
-
-const sendTodos = (_, response) => {
+const sendTodos = (_, res) => {
   const path = "./database/todos.json";
 
   readFile(path, (_, todosListsDetails) => {
-    response.setHeader(HEADERS.contentType, MIME_TYPES.json);
-    response.end(todosListsDetails);
-  });
-};
-
-const updateTodos = (request, response) => {
-  const todoLists = request.app.todoLists;
-  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-  const path = "./database/todos.json";
-
-  writeFile(path, todoListsDetails, () => {
-    response.status = 201;
-    response.end();
+    res.set(HEADERS.contentType, MIME_TYPES.json);
+    res.send(todosListsDetails);
   });
 };
 
 const updateTodoDatabase = (todoListsDetails) => {
+  const todoData = JSON.stringify(todoListsDetails);
   const path = "./database/todos.json";
 
-  writeFile(path, todoListsDetails, () => {
+  writeFile(path, todoData, () => {
     console.log("database updated");
   });
 };
 
-const addTodoList = (request, response) => {
-  console.log(request.body);
-
-  const todoLists = request.app.todoLists;
-  const { listName } = request.body;
+const addTodoList = (req, res) => {
+  const todoLists = req.app.todoLists;
+  const { listName } = req.body;
   const listId = todoLists.getNumberOfTodoLists();
   const todoList = new TodoList(listName, listId);
 
   todoLists.addTodoList(todoList);
-  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-  updateTodoDatabase(todoListsDetails);
+  updateTodoDatabase(todoListsDetails.getTodosDetails());
 
-  response.statusCode = 201;
-  response.end(JSON.stringify({ listId }));
+  res.status(201).json({ listId });
 };
 
-const addTodo = (request, response) => {
-  const todoLists = request.app.todoLists;
-  const { todoDescription } = request.body;
+const addTodo = (req, res) => {
+  const todoLists = req.app.todoLists;
+  const { todoDescription } = req.body;
 
-  const listId = +request.params.listId;
+  const listId = +req.params.listId;
   const todoId = todoLists.getNumberOfTodos();
   const todo = new Todo(todoDescription, todoId);
 
   todoLists.addTodo(todo, listId);
-  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-  updateTodoDatabase(todoListsDetails);
+  updateTodoDatabase(todoListsDetails.getTodosDetails());
 
-  response.status = 201;
-  response.end(JSON.stringify({ todoId }));
+  res.status(201).json({ todoId });
 };
 
-const deleteTodo = (request, response) => {
-  const todoLists = request.app.todoLists;
-  const { listId, todoId } = request.params;
+const deleteTodo = (req, res) => {
+  const todoLists = req.app.todoLists;
+  const { listId, todoId } = req.params;
   todoLists.deleteTodo(+listId, +todoId);
+  updateTodoDatabase(todoListsDetails.getTodosDetails());
 
-  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-  updateTodoDatabase(todoListsDetails);
-
-  response.status = 204;
-  response.end();
+  res.status(204).end();
 };
 
-const toggleTodoStatus = (request, response) => {
-  const todoLists = request.app.todoLists;
-  const { listId, todoId } = request.params;
+const toggleTodoStatus = (req, res) => {
+  const todoLists = req.app.todoLists;
+  const { listId, todoId } = req.params;
   todoLists.toggleTodoStatus(+listId, +todoId);
+  updateTodoDatabase(todoListsDetails.getTodosDetails());
 
-  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-  updateTodoDatabase(todoListsDetails);
-
-  response.status = 204;
-  response.end();
+  res.status(204).end();
 };
 
 module.exports = {
-  serveHomePage,
   handleInvalidMethod,
   sendTodos,
-  updateTodos,
   addTodoList,
   addTodo,
   deleteTodo,

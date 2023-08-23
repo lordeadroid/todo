@@ -7,13 +7,6 @@ class TodoController {
     this.#todoLists = todoLists;
   }
 
-  #updateTodoDatabase(todoListsDetails) {
-    fetch("/todo-lists", {
-      method: "PUT",
-      body: JSON.stringify(todoListsDetails),
-    });
-  }
-
   #toggleSortAlphabetically(listId) {
     this.#todoLists.toggleSortAlphabetically(listId);
   }
@@ -30,7 +23,7 @@ class TodoController {
         "content-type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then(({ todoId }) => {
         const todo = new Todo(todoDescription, todoId);
         this.#todoLists.addTodo(todo, listId);
@@ -46,7 +39,7 @@ class TodoController {
         "content-type": "application/json",
       },
     })
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then(({ listId }) => {
         const todoList = new TodoList(listName, listId);
         this.#todoLists.addTodoList(todoList);
@@ -56,7 +49,6 @@ class TodoController {
 
   #displayTodos() {
     const todoListsDetails = this.#todoLists.getTodosDetails();
-    this.#updateTodoDatabase(todoListsDetails);
     this.#todoView.renderLists(todoListsDetails);
   }
 
