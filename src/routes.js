@@ -7,12 +7,14 @@ const {
   addTodoList,
   addTodo,
   deleteTodo,
+  toggleTodoStatus,
 } = require("./handlers.js");
 
 const METHODS = {
   get: "GET",
   put: "PUT",
   post: "POST",
+  patch: "PATCH",
   delete: "DELETE",
 };
 
@@ -51,6 +53,11 @@ const ROUTES = [
     route: "^/todo-lists/\\d+/todos/\\d+$",
     method: METHODS.delete,
     handler: deleteTodo,
+  },
+  {
+    route: "^/todo-lists/\\d+/todos/\\d+$",
+    method: METHODS.patch,
+    handler: toggleTodoStatus,
   },
   {
     route: "/favicon.ico",

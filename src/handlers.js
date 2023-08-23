@@ -122,6 +122,18 @@ const deleteTodo = (request, response, todoLists) => {
   response.end();
 };
 
+const toggleTodoStatus = (request, response, todoLists) => {
+  const { listId, todoId } = getIds(request.url);
+
+  todoLists.toggleTodoStatus(listId, todoId);
+
+  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
+  updateTodoDatabase(todoListsDetails);
+
+  response.statusCode = 204;
+  response.end();
+};
+
 module.exports = {
   serveHomePage,
   handleInvalidMethod,
@@ -132,4 +144,5 @@ module.exports = {
   addTodoList,
   addTodo,
   deleteTodo,
+  toggleTodoStatus,
 };

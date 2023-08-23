@@ -74,8 +74,12 @@ class TodoController {
       const listId = this.#extractId(listElementId);
       const todoId = this.#extractId(todoElementId);
 
-      this.#todoLists.toggleTodoStatus(listId, todoId);
-      this.#displayTodos();
+      fetch(`/todo-lists/${listId}/todos/${todoId}`, {
+        method: "PATCH",
+      }).then(() => {
+        this.#todoLists.toggleTodoStatus(listId, todoId);
+        this.#displayTodos();
+      });
     });
 
     this.#todoView.setupRemoveTodoListener((listElementId, todoElementId) => {
