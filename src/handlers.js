@@ -41,17 +41,13 @@ const sendTodos = (_, response) => {
   });
 };
 
-const updateTodos = (request, response) => {
-  let todoListsDetails = "";
+const updateTodos = (request, response, todoLists) => {
+  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
+  const path = "./database/todos.json";
 
-  request.on("data", (chunk) => (todoListsDetails += chunk));
-  request.on("end", () => {
-    const path = "./database/todos.json";
-
-    writeFile(path, todoListsDetails, () => {
-      response.statusCode = 201;
-      response.end();
-    });
+  writeFile(path, todoListsDetails, () => {
+    response.statusCode = 201;
+    response.end();
   });
 };
 
@@ -77,42 +73,53 @@ const updateTodoDatabase = (todoListsDetails) => {
 };
 
 const addTodoList = (request, response, todoLists) => {
-  let requestBody = "";
+  const { listName } = JSON.parse(request.body);
 
-  request.on("data", (chunk) => (requestBody += chunk));
-  request.on("end", () => {
-    const { listName } = JSON.parse(requestBody);
+  const listId = todoLists.getNumberOfTodoLists();
+  const todoList = new TodoList(listName, listId);
 
-    const listId = todoLists.getNumberOfTodoLists();
-    const todoList = new TodoList(listName, listId);
+  todoLists.addTodoList(todoList);
+  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
+  updateTodoDatabase(todoListsDetails);
 
-    todoLists.addTodoList(todoList);
-    const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-    updateTodoDatabase(todoListsDetails);
-
-    response.statusCode = 201;
-    response.end(JSON.stringify({ listId }));
-  });
+  response.statusCode = 201;
+  response.end(JSON.stringify({ listId }));
 };
 
 const addTodo = (request, response, todoLists) => {
-  let requestBody = "";
+  const { todoDescription } = JSON.parse(request.body);
 
-  request.on("data", (chunk) => (requestBody += chunk));
-  request.on("end", () => {
-    const { todoDescription } = JSON.parse(requestBody);
+  const listId = +request.url.split("/").pop();
+  const todoId = todoLists.getNumberOfTodos();
+  const todo = new Todo(todoDescription, todoId);
 
-    const listId = +request.url.split("/").pop();
-    const todoId = todoLists.getNumberOfTodos();
-    const todo = new Todo(todoDescription, todoId);
+  todoLists.addTodo(todo, listId);
+  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
+  updateTodoDatabase(todoListsDetails);
 
-    todoLists.addTodo(todo, listId);
-    const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
-    updateTodoDatabase(todoListsDetails);
+  response.statusCode = 201;
+  response.end(JSON.stringify({ todoId }));
+};
 
-    response.statusCode = 201;
-    response.end(JSON.stringify({ todoId }));
-  });
+const getIds = (url) => {
+  const [, , listId, , todoId] = url.split("/");
+
+  return {
+    listId: +listId,
+    todoId: +todoId,
+  };
+};
+
+const deleteTodo = (request, response, todoLists) => {
+  const { listId, todoId } = getIds(request.url);
+
+  todoLists.deleteTodo(listId, todoId);
+
+  const todoListsDetails = JSON.stringify(todoLists.getTodosDetails());
+  updateTodoDatabase(todoListsDetails);
+
+  response.statusCode = 204;
+  response.end();
 };
 
 module.exports = {
@@ -124,4 +131,5 @@ module.exports = {
   serverStaticPage,
   addTodoList,
   addTodo,
+  deleteTodo,
 };

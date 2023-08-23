@@ -82,8 +82,12 @@ class TodoController {
       const listId = this.#extractId(listElementId);
       const todoId = this.#extractId(todoElementId);
 
-      this.#todoLists.deleteTodo(listId, todoId);
-      this.#displayTodos();
+      fetch(`/todo-lists/${listId}/todos/${todoId}`, {
+        method: "DELETE",
+      }).then(() => {
+        this.#todoLists.deleteTodo(listId, todoId);
+        this.#displayTodos();
+      });
     });
 
     this.#todoView.setupSortAlphabetically((listElementId) => {

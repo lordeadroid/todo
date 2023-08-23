@@ -6,12 +6,14 @@ const {
   serverStaticPage,
   addTodoList,
   addTodo,
+  deleteTodo,
 } = require("./handlers.js");
 
 const METHODS = {
   get: "GET",
-  post: "POST",
   put: "PUT",
+  post: "POST",
+  delete: "DELETE",
 };
 
 const ROUTES = [
@@ -44,6 +46,11 @@ const ROUTES = [
     route: "^/todo-lists/\\d+$",
     method: METHODS.post,
     handler: addTodo,
+  },
+  {
+    route: "^/todo-lists/\\d+/todos/\\d+$",
+    method: METHODS.delete,
+    handler: deleteTodo,
   },
   {
     route: "/favicon.ico",

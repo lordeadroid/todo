@@ -10,10 +10,21 @@ const log = (request) => {
   return request;
 };
 
+const readRequestBody = (request, routeHandler) => {
+  let body = "";
+  request.on("data", (chunk) => (body += chunk));
+  request.on("end", () => {
+    request.body = body;
+    routeHandler();
+  });
+};
+
 const setupServer = (todoLists) => {
   const server = http.createServer((request, response) => {
     log(request);
-    route(request, response, todoLists);
+    readRequestBody(request, () => {
+      route(request, response, todoLists);
+    });
   });
 
   const PORT = 9000;
@@ -31,6 +42,7 @@ const main = () => {
 
   readFile(path, encoding, (_, content) => {
     const todoListsDetails = JSON.parse(content);
+
     createTodoLists(todoListsDetails, todoLists);
     setupServer(todoLists);
   });

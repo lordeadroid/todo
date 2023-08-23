@@ -1,7 +1,7 @@
-<!-- make todo -->
+<!-- make todo
 <!-- make todoList -->
 
-todo list (section)
+<!-- todo list (section)
 
 create new task (div) w
 
@@ -13,4 +13,18 @@ create new task (div) w
 alltasks (div)
 
 make an entity that will handle with database
-on adding a list save the new list on the database
+on adding a list save the new list on the database -->
+
+# STORY BOARD
+
+- Migration
+
+  - delete api
+  - toggle todo endpoint
+
+- Styling (outsource from raj)
+
+  - change structure
+  - add css
+
+- Change server from http to express
