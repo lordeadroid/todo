@@ -1,18 +1,18 @@
-const { readFile, writeFile } = require("fs");
-const { Todo } = require("./todo.js");
-const { TodoList } = require("./todo-list.js");
+const { writeFile } = require('fs');
+const { Todo } = require('./todo.js');
+const { TodoList } = require('./todo-list.js');
 
 const sendTodos = (_, res) => {
-  const path = "database/todos.json";
+  const path = 'database/todos.json';
   res.sendFile(`${process.env.PWD}/${path}`);
 };
 
 const updateTodoDatabase = (todoListsDetails) => {
   const todoData = JSON.stringify(todoListsDetails);
-  const path = "./database/todos.json";
+  const path = './database/todos.json';
 
   writeFile(path, todoData, () => {
-    console.log("database updated");
+    console.log('database updated');
   });
 };
 

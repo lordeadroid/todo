@@ -5,51 +5,53 @@ class TodoAdmin {
     this.#todoLists = todoLists;
   }
 
-  addTodoList(listName, createTodoList) {
-    fetch('/todo-lists', {
-      method: 'POST',
+  addTodoList(listName, displayTodo) {
+    fetch("/todo-lists", {
+      method: "POST",
       body: JSON.stringify({ listName }),
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
     })
       .then((res) => res.json())
       .then(({ listId }) => {
         const todoList = new TodoList(listName, listId);
         this.#todoLists.addTodoList(todoList);
-        createTodoList();
+        displayTodo();
       });
   }
 
-  addTodo(todoDescription, listId, createTodo) {
+  addTodo(todoDescription, listId, displayTodo) {
     fetch(`/todo-lists/${listId}`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ todoDescription }),
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
     })
       .then((res) => res.json())
       .then(({ todoId }) => {
         const todo = new Todo(todoDescription, todoId);
         this.#todoLists.addTodo(todo, listId);
-        createTodo();
+        displayTodo();
       });
   }
 
-  toggleTodoStatus(listId, todoId, toggleStatus) {
+  toggleTodoStatus(listId, todoId, displayTodo) {
     fetch(`/todo-lists/${listId}/todos/${todoId}`, {
-      method: 'PATCH',
+      method: "PATCH",
     }).then(() => {
-      toggleStatus(listId, todoId);
+      this.#todoLists.toggleTodoStatus(listId, todoId);
+      displayTodo();
     });
   }
 
-  removeTodo(listId, todoId, removeTodo) {
+  removeTodo(listId, todoId, displayTodo) {
     fetch(`/todo-lists/${listId}/todos/${todoId}`, {
-      method: 'DELETE',
+      method: "DELETE",
     }).then(() => {
-      removeTodo(listId, todoId);
+      this.#todoLists.deleteTodo(listId, todoId);
+      displayTodo();
     });
   }
 
