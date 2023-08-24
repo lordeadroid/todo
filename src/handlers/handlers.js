@@ -1,6 +1,6 @@
 const { writeFile } = require('fs');
-const { Todo } = require('./todo.js');
-const { TodoList } = require('./todo-list.js');
+const { Todo } = require('../models/todo.js');
+const { TodoList } = require('../models/todo-list.js');
 
 const sendTodos = (_, res) => {
   const path = 'database/todos.json';
