@@ -1,5 +1,5 @@
 const { readFile } = require('fs');
-const { TodoLists } = require('./src/todo-lists.js');
+const { TodoLists } = require('./src/models/todo-lists');
 const { createTodoLists } = require('./src/models/parser.js');
 const { createApp } = require('./src/create-app.js');
 
