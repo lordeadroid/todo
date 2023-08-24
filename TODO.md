@@ -28,3 +28,6 @@ on adding a list save the new list on the database -->
   - add css
 
 - Change server from http to express
+  Todo => Task
+  TodoList => Todo
+  TodoLists => TodoList

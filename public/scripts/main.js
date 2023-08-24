@@ -5,12 +5,8 @@ const main = () => {
 
   const todoView = new TodoView(addListBox, addListButton, todoListContainer);
   const todoLists = new TodoLists();
-  const todoDataFetcher = new TodoDataFetcher();
-  const todoController = new TodoController(
-    todoView,
-    todoLists,
-    todoDataFetcher
-  );
+  const todoAdmin = new TodoAdmin(todoLists);
+  const todoController = new TodoController(todoView, todoLists, todoAdmin);
 
   fetch("/todo-lists")
     .then((res) => res.json())

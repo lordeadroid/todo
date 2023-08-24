@@ -1,6 +1,5 @@
 const { readFile } = require("fs");
 const express = require("express");
-
 const { TodoLists } = require("./src/todo-lists.js");
 const { createTodoLists } = require("./src/parser.js");
 
@@ -35,8 +34,8 @@ const setupServer = (todoLists) => {
 
   const PORT = 9000;
   app.listen(PORT, () => {
-    const TIME = new Date().toTimeString();
-    console.log("Listening on PORT:", PORT, TIME);
+    const time = new Date().toTimeString();
+    console.log("Listening on PORT:", PORT, time);
   });
 };
 

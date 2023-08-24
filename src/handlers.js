@@ -1,20 +1,10 @@
 const { readFile, writeFile } = require("fs");
-
 const { Todo } = require("./todo.js");
 const { TodoList } = require("./todo-list.js");
-const { HEADERS, MIME_TYPES } = require("./constants.js");
-
-const handleInvalidMethod = (_, res) => {
-  res.status(405).send("Invalid Method");
-};
 
 const sendTodos = (_, res) => {
-  const path = "./database/todos.json";
-
-  readFile(path, (_, todosListsDetails) => {
-    res.set(HEADERS.contentType, MIME_TYPES.json);
-    res.send(todosListsDetails);
-  });
+  const path = "database/todos.json";
+  res.sendFile(`${process.env.PWD}/${path}`);
 };
 
 const updateTodoDatabase = (todoListsDetails) => {
@@ -71,7 +61,6 @@ const toggleTodoStatus = (req, res) => {
 };
 
 module.exports = {
-  handleInvalidMethod,
   sendTodos,
   addTodoList,
   addTodo,

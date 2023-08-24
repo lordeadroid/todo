@@ -1,12 +1,12 @@
 class TodoController {
   #todoView;
   #todoLists;
-  #todoDataFetcher;
+  #todoAdmin;
 
-  constructor(todoView, todoLists, todoDataFetcher) {
+  constructor(todoView, todoLists, todoAdmin) {
     this.#todoView = todoView;
     this.#todoLists = todoLists;
-    this.#todoDataFetcher = todoDataFetcher;
+    this.#todoAdmin = todoAdmin;
   }
 
   #extractId(elementId) {
@@ -14,7 +14,7 @@ class TodoController {
   }
 
   #displayTodos() {
-    const todoListsDetails = this.#todoLists.getTodosDetails();
+    const todoListsDetails = this.#todoAdmin.getTodosDetails();
     this.#todoView.renderLists(todoListsDetails);
   }
 
@@ -24,7 +24,7 @@ class TodoController {
   }
 
   #onRemoveTodo(listId, todoId) {
-    this.#todoDataFetcher.removeTodo(listId, todoId, (listId, todoId) => {
+    this.#todoAdmin.removeTodo(listId, todoId, (listId, todoId) => {
       this.#removeTodo(listId, todoId);
     });
   }
@@ -43,7 +43,7 @@ class TodoController {
   }
 
   #onToggleTodoStatus(listId, todoId) {
-    this.#todoDataFetcher.toggleTodoStatus(listId, todoId, (listId, todoId) => {
+    this.#todoAdmin.toggleTodoStatus(listId, todoId, (listId, todoId) => {
       this.#toggleTodoStatus(listId, todoId);
     });
   }
@@ -55,31 +55,20 @@ class TodoController {
   }
 
   #onAddTodo(des, listId) {
-    this.#todoDataFetcher.addTodo(des, listId, (des, listId, todoId) => {
+    this.#todoAdmin.addTodo(des, listId, (des, listId, todoId) => {
       this.#createTodo(des, listId, todoId);
     });
   }
 
-  #createTodoList(listName, listId) {
-    const todoList = new TodoList(listName, listId);
-    this.#todoLists.addTodoList(todoList);
-    this.#displayTodos();
-  }
-
-  #onAddTodoList(listName) {
-    this.#todoDataFetcher.addTodoList(listName, (listName, listId) => {
-      this.#createTodoList(listName, listId);
-    });
-    }
-
   start() {
     this.#todoView.setupAddTodoList((listName) => {
-      this.#onAddTodoList(listName);
+      this.#todoAdmin.addTodoList(listName, () => this.#displayTodos());
     });
 
-    this.#todoView.setupAddTodo((todoDescription, listElementId) => {
-      const listId = this.#extractId(listElementId);
-      this.#onAddTodo(todoDescription, listId);
+    this.#todoView.setupAddTodo((todoDescription, listId) => {
+      this.#todoAdmin.addTodo(todoDescription, listId, () =>
+        this.#displayTodos()
+      );
     });
 
     this.#todoView.setupToggleListener((listElementId, todoElementId) => {
