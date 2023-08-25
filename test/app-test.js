@@ -32,4 +32,19 @@ describe('APP', () => {
         .end(done);
     });
   });
+
+  describe('POST /todo-lists', () => {
+    it('should add a todoList to the database', (_, done) => {
+      const todoLists = new TodoLists();
+      const app = createApp(todoLists);
+      const listName = 'work';
+      request(app)
+        .post('/todo-lists')
+        .send({ listName })
+        .expect(201)
+        .expect('content-type', /json/)
+        .expect({ listId: 0 })
+        .end(done);
+    });
+  });
 });

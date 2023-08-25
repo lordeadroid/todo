@@ -3,5 +3,11 @@
   "coverage": true,
   "statements": 70,
   "reporter": ["html", "text"],
-  "exclude": [".eslintrc.js", "server.js", "coverage", "public/scripts/main.js"]
+  "exclude": [
+    "test/",
+    "coverage/",
+    ".eslintrc.js",
+    "server.js",
+    "public/scripts/main.js"
+  ]
 }
