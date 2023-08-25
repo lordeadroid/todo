@@ -1,4 +1,6 @@
-  class TodoLists {
+/* eslint-disable no-unused-vars */
+
+class TodoLists {
   #todoLists;
 
   constructor() {

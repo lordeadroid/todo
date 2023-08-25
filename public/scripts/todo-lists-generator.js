@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const createTodo = ({ id, description, isDone }) => {
   const todo = new Todo(description, id);
 

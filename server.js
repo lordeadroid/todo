@@ -1,4 +1,4 @@
-const { readFile } = require('fs');
+const fs = require('fs');
 const { TodoLists } = require('./src/models/todo-lists');
 const { createTodoLists } = require('./src/models/parser.js');
 const { createApp } = require('./src/app.js');
@@ -14,12 +14,11 @@ const setupServer = (todoLists) => {
 };
 
 const main = () => {
-  const path = './database/todos.json';
+  const path = `${process.env.PWD}/database.json`;
   const todoLists = new TodoLists();
 
-  readFile(path, 'utf-8', (_, content) => {
+  fs.readFile(path, 'utf-8', (_, content = '[]') => {
     const todoListsDetails = JSON.parse(content);
-
     createTodoLists(todoListsDetails, todoLists);
     setupServer(todoLists);
   });

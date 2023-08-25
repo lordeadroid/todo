@@ -9,10 +9,10 @@ const sendTodos = (req, res) => {
 
 const updateTodoDatabase = (todoListsDetails) => {
   const todoData = JSON.stringify(todoListsDetails);
-  const path = './database/todos.json';
+  const path = `${process.env.PWD}/database.json`;
 
   writeFile(path, todoData, () => {
-    console.log('database updated');
+    console.log('Database Updated');
   });
 };
 

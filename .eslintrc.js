@@ -6,21 +6,13 @@ module.exports = {
     semi: ['error'],
     'arrow-parens': ['error', 'always'],
     'comma-spacing': ['error', { after: true }],
-
     'no-unsafe-optional-chaining': ['error'],
-    //
     'no-unused-vars': ['error', { varsIgnorePattern: '_' }],
-    //unused variable
     'space-infix-ops': ['error'],
-    //space before and after mathematical operators
     'constructor-super': ['error'],
-    //use of super when inheriting other class
     'func-call-spacing': ['error'],
-    //use of space between function name and round brackets
     'class-methods-use-this': ['warn'],
-    //use of this inside class
     'no-console': 'error',
-    semi: 'warn',
     'array-callback-return': ['error', { checkForEach: true }],
     'no-cond-assign': 'error',
     'no-dupe-keys': 'error',
