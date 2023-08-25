@@ -68,4 +68,23 @@ describe('APP', () => {
         .end(done);
     });
   });
+
+  describe('DELETE /todo-lists/:listId/todos/:todoId', () => {
+    it('should delete a todo in the specified list', (_, done) => {
+      const listId = 0;
+      const todoId = 0;
+      const todoDescription = 'drink water';
+      const todo = new Todo(todoDescription, todoId);
+      const todoList = new TodoList('work', listId);
+      const todoLists = new TodoLists();
+      todoLists.addTodoList(todoList);
+      todoLists.addTodo(todo, listId);
+      const app = createApp(todoLists);
+
+      request(app)
+        .delete(`/todo-lists/${listId}/todos/${todoId}`)
+        .expect(204)
+        .end(done);
+    });
+  });
 });
