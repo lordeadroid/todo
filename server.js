@@ -1,11 +1,10 @@
 const { readFile } = require('fs');
 const { TodoLists } = require('./src/models/todo-lists');
 const { createTodoLists } = require('./src/models/parser.js');
-const { createApp } = require('./src/create-app.js');
+const { createApp } = require('./src/app.js');
 
 const setupServer = (todoLists) => {
-  const app = createApp();
-  app.todoLists = todoLists;
+  const app = createApp(todoLists);
 
   const PORT = 9000;
   app.listen(PORT, () => {

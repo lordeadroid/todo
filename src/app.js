@@ -8,8 +8,10 @@ const {
   toggleTodoStatus,
 } = require('./handlers/todo-handlers');
 
-const createApp = () => {
+const createApp = (todoLists) => {
   const app = express();
+
+  app.todoLists = todoLists;
 
   app.use(logRequest);
   app.use(express.json());

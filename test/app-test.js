@@ -1,10 +1,10 @@
 const request = require('supertest');
 const { describe, it } = require('node:test');
-const { createApp } = require('../src/create-app');
+const { createApp } = require('../src/app');
 const { TodoList } = require('../src/models/todo-list');
 const { TodoLists } = require('../src/models/todo-lists');
 
-describe('API endpoint testing', () => {
+describe('APP', () => {
   describe('GET /todo-lists', () => {
     it('should give no todo initially', (_, done) => {
       const todoLists = new TodoLists();
