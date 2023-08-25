@@ -2,9 +2,9 @@ const { writeFile } = require('fs');
 const { Todo } = require('../models/todo.js');
 const { TodoList } = require('../models/todo-list.js');
 
-const sendTodos = (_, res) => {
-  const path = 'database/todos.json';
-  res.sendFile(`${process.env.PWD}/${path}`);
+const sendTodos = (req, res) => {
+  const todoListsDetails = req.app.todoLists.getTodosDetails();
+  res.json(todoListsDetails);
 };
 
 const updateTodoDatabase = (todoListsDetails) => {

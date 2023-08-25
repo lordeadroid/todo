@@ -1,25 +1,15 @@
 class TodoController {
   #todoView;
-  #todoLists;
   #todoAdmin;
 
-  constructor(todoView, todoLists, todoAdmin) {
+  constructor(todoView, todoAdmin) {
     this.#todoView = todoView;
-    this.#todoLists = todoLists;
     this.#todoAdmin = todoAdmin;
   }
 
   #displayTodos() {
     const todoListsDetails = this.#todoAdmin.getTodosDetails();
     this.#todoView.renderLists(todoListsDetails);
-  }
-
-  #toggleSortAlphabetically(listId) {
-    this.#todoLists.toggleSortAlphabetically(listId);
-  }
-
-  #toggleGroupSort(listId) {
-    this.#todoLists.toggleGroupSort(listId);
   }
 
   start() {
@@ -44,13 +34,11 @@ class TodoController {
     });
 
     this.#todoView.setupSortAlphabetically((listId) => {
-      this.#toggleSortAlphabetically(listId);
-      this.#displayTodos();
+      this.#todoAdmin.sortAlphabetically(listId, () => this.#displayTodos());
     });
 
     this.#todoView.setupSortByGroup((listId) => {
-      this.#toggleGroupSort(listId);
-      this.#displayTodos();
+      this.#todoAdmin.sortByGroup(listId, () => this.#displayTodos());
     });
 
     this.#displayTodos();

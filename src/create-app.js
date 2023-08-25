@@ -1,17 +1,12 @@
 const express = require('express');
-
+const { logRequest } = require('./middlewares/logger');
 const {
   sendTodos,
   addTodoList,
   addTodo,
   deleteTodo,
   toggleTodoStatus,
-} = require('./handlers/handlers');
-
-const logRequest = (req, _, next) => {
-  console.log(req.method, req.path);
-  next();
-};
+} = require('./handlers/todo-handlers');
 
 const createApp = () => {
   const app = express();
