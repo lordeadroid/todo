@@ -1,9 +1,11 @@
 const request = require('supertest');
 const { describe, it } = require('node:test');
 const { createApp } = require('../src/app');
-const { Todo } = require('../src/models/todo');
-const { TodoList } = require('../src/models/todo-list');
 const { TodoLists } = require('../src/models/todo-lists');
+const {
+  getTodoLists,
+  getTodoListsWithTodo,
+} = require('./test-data/todo-list-data');
 
 describe('APP', () => {
   describe('GET /todo-lists', () => {
@@ -20,9 +22,7 @@ describe('APP', () => {
     });
 
     it('should give all the todos', (_, done) => {
-      const todoList = new TodoList('work', 0);
-      const todoLists = new TodoLists();
-      todoLists.addTodoList(todoList);
+      const todoLists = getTodoLists();
       const app = createApp(todoLists);
 
       request(app)
@@ -53,14 +53,11 @@ describe('APP', () => {
   describe('POST /todo-lists/:listId', () => {
     it('should add a todo to the given list', (_, done) => {
       const todoDescription = 'drink water';
-      const listId = 0;
-      const todoList = new TodoList('work', listId);
-      const todoLists = new TodoLists();
-      todoLists.addTodoList(todoList);
+      const todoLists = getTodoLists();
       const app = createApp(todoLists);
 
       request(app)
-        .post(`/todo-lists/${listId}`)
+        .post('/todo-lists/0')
         .send({ todoDescription })
         .expect(201)
         .expect('content-type', /json/)
@@ -71,20 +68,11 @@ describe('APP', () => {
 
   describe('DELETE /todo-lists/:listId/todos/:todoId', () => {
     it('should delete a todo in the specified list', (_, done) => {
-      const listId = 0;
-      const todoId = 0;
-      const todoDescription = 'drink water';
-      const todo = new Todo(todoDescription, todoId);
-      const todoList = new TodoList('work', listId);
-      const todoLists = new TodoLists();
-      todoLists.addTodoList(todoList);
-      todoLists.addTodo(todo, listId);
+      const todoLists = getTodoListsWithTodo('todo');
+      console.log(todoLists);
       const app = createApp(todoLists);
 
-      request(app)
-        .delete(`/todo-lists/${listId}/todos/${todoId}`)
-        .expect(204)
-        .end(done);
+      request(app).delete('/todo-lists/0/todos/0').expect(204).end(done);
     });
   });
 });

@@ -4,9 +4,9 @@
   "description": "",
   "main": "todo.js",
   "scripts": {
-    "server": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "node --watch --test test/*",
+    "start": "node server.js",
+    "server": "node --watch server.js",
+    "test": "node --test",
     "lint": "eslint .",
     "coverage": "npx nyc node --test"
   },
