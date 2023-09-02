@@ -6,7 +6,7 @@ const { createApp } = require('./src/app.js');
 const setupServer = (todoLists) => {
   const app = createApp(todoLists);
 
-  const PORT = 9000;
+  const PORT = process.env.PORT || 9000;
   app.listen(PORT, () => {
     const time = new Date().toTimeString();
     console.log('Listening on PORT:', PORT, time);
