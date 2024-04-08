@@ -1,78 +1,79 @@
-const request = require('supertest');
-const { describe, it } = require('node:test');
-const { createApp } = require('../src/app');
-const { TodoLists } = require('../src/models/todo-lists');
+const request = require("supertest");
+const { describe, it } = require("node:test");
+const { createApp } = require("../src/app");
+const { TodoLists } = require("../src/models/todo-lists");
 const {
   getTodoLists,
   getTodoListsWithTodo,
-} = require('./test-data/todo-list-data');
+} = require("./test-data/todo-list-data");
 
-describe('APP', () => {
-  describe('GET /todo-lists', () => {
-    it('should give no todo initially', (_, done) => {
+describe("APP", () => {
+  describe("GET /todo-lists", () => {
+    it("should give no todo initially", (_, done) => {
       const todoLists = new TodoLists();
       const app = createApp(todoLists);
 
       request(app)
-        .get('/todo-lists')
+        .get("/todo-lists")
         .expect(200)
-        .expect('content-type', /json/)
+        .expect("content-type", /json/)
         .expect([])
         .end(done);
     });
 
-    it('should give all the todos', (_, done) => {
+    it("should give all the todos", (_, done) => {
       const todoLists = getTodoLists();
       const app = createApp(todoLists);
 
       request(app)
-        .get('/todo-lists')
+        .get("/todo-lists")
         .expect(200)
-        .expect('content-type', /json/)
-        .expect([{ listName: 'work', listId: 0, todos: [] }])
+        .expect("content-type", /json/)
+        .expect([{ listName: "work", listId: 0, todos: [] }])
         .end(done);
     });
   });
 
-  describe('POST /todo-lists', () => {
-    it('should add a todoList to the database', (_, done) => {
+  describe("POST /todo-lists", () => {
+    it("should add a todoList to the database", (_, done) => {
       const todoLists = new TodoLists();
       const app = createApp(todoLists);
-      const listName = 'work';
+      const listName = "work";
 
       request(app)
-        .post('/todo-lists')
+        .post("/todo-lists")
         .send({ listName })
         .expect(201)
-        .expect('content-type', /json/)
+        .expect("content-type", /json/)
         .expect({ listId: 0 })
         .end(done);
     });
   });
 
-  describe('POST /todo-lists/:listId', () => {
-    it('should add a todo to the given list', (_, done) => {
-      const todoDescription = 'drink water';
+  describe("POST /todo-lists/:listId", () => {
+    it("should add a todo to the given list", (_, done) => {
+      const todoDescription = "drink water";
       const todoLists = getTodoLists();
       const app = createApp(todoLists);
 
       request(app)
-        .post('/todo-lists/0')
+        .post("/todo-lists/0")
         .send({ todoDescription })
         .expect(201)
-        .expect('content-type', /json/)
+        .expect("content-type", /json/)
         .expect({ todoId: 0 })
         .end(done);
     });
   });
 
-  describe('DELETE /todo-lists/:listId/todos/:todoId', () => {
-    it('should delete a todo in the specified list', (_, done) => {
-      const todoLists = getTodoListsWithTodo('todo');
+  describe("DELETE /todo-lists/:listId/todos/:todoId", () => {
+    it("should delete a todo in the specified list", (_, done) => {
+      const todoLists = getTodoListsWithTodo("todo");
+      // eslint-disable-next-line no-console
       console.log(todoLists);
       const app = createApp(todoLists);
 
-      request(app).delete('/todo-lists/0/todos/0').expect(204).end(done);
+      request(app).delete("/todo-lists/0/todos/0").expect(204).end(done);
     });
   });
 });

@@ -1,6 +1,6 @@
-const { writeFile } = require('fs');
-const { Todo } = require('../models/todo.js');
-const { TodoList } = require('../models/todo-list.js');
+const { writeFile } = require("fs");
+const { Todo } = require("../models/todo.js");
+const { TodoList } = require("../models/todo-list.js");
 
 const sendTodos = (req, res) => {
   const todoListsDetails = req.app.todoLists.getTodosDetails();
@@ -12,7 +12,8 @@ const updateTodoDatabase = (todoListsDetails) => {
   const path = `${process.env.PWD}/database.json`;
 
   writeFile(path, todoData, () => {
-    console.log('Database Updated');
+    // eslint-disable-next-line no-console
+    console.log("Database Updated");
   });
 };
 

@@ -13,7 +13,7 @@ class TodoAdmin {
   }
 
   getAllTodos(init) {
-    fetch('/todo-lists')
+    fetch("/todo-lists")
       .then((res) => res.json())
       .then((todoListDetails) => {
         init(todoListDetails);
@@ -21,11 +21,11 @@ class TodoAdmin {
   }
 
   addTodoList(listName, displayTodo) {
-    fetch('/todo-lists', {
-      method: 'POST',
+    fetch("/todo-lists", {
+      method: "POST",
       body: JSON.stringify({ listName }),
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
     })
       .then((res) => res.json())
@@ -38,10 +38,10 @@ class TodoAdmin {
 
   addTodo(todoDescription, listId, displayTodo) {
     fetch(`/todo-lists/${listId}`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ todoDescription }),
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
     })
       .then((res) => res.json())
@@ -54,7 +54,7 @@ class TodoAdmin {
 
   toggleTodoStatus(listId, todoId, displayTodo) {
     fetch(`/todo-lists/${listId}/todos/${todoId}`, {
-      method: 'PATCH',
+      method: "PATCH",
     }).then(() => {
       this.#todoLists.toggleTodoStatus(listId, todoId);
       displayTodo();
@@ -63,7 +63,7 @@ class TodoAdmin {
 
   removeTodo(listId, todoId, displayTodo) {
     fetch(`/todo-lists/${listId}/todos/${todoId}`, {
-      method: 'DELETE',
+      method: "DELETE",
     }).then(() => {
       this.#todoLists.deleteTodo(listId, todoId);
       displayTodo();

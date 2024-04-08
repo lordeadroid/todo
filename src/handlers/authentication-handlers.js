@@ -1,4 +1,4 @@
-const handleAuthentication = (request, response, _) => {
+const handleAuthentication = (request, response) => {
   const details = {};
   details.verified = request.cookies.username ? true : false;
   details.username = request.cookies.username;
