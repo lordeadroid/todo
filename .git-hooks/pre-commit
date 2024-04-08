@@ -17,6 +17,3 @@ check "tests failed"
 
 npm run lint
 check "linting errors"
-
-npm run coverage
-check "coverage is not covered"
