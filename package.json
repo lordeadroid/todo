@@ -7,11 +7,12 @@
     "node": "20.x"
   },
   "scripts": {
+    "coverage": "npx nyc node --test",
+    "lint": "eslint .",
+    "dev": "node --watch server.js",
     "start": "node server.js",
     "server": "node --watch server.js",
-    "test": "node --test",
-    "lint": "eslint .",
-    "coverage": "npx nyc node --test"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
