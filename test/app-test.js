@@ -69,8 +69,6 @@ describe("APP", () => {
   describe("DELETE /todo-lists/:listId/todos/:todoId", () => {
     it("should delete a todo in the specified list", (_, done) => {
       const todoLists = getTodoListsWithTodo("todo");
-      // eslint-disable-next-line no-console
-      console.log(todoLists);
       const app = createApp(todoLists);
 
       request(app).delete("/todo-lists/0/todos/0").expect(204).end(done);
