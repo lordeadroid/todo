@@ -45,6 +45,11 @@ body {
   height: 700px;
   border-radius: 40px;
   padding: 40px;
+  overflow: scroll;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .add-list {
