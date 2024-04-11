@@ -42,6 +42,10 @@ class TodoLists {
     return this.#todoLists.map((todoList) => todoList.getDetails());
   }
 
+  getListsName() {
+    return this.getTodosDetails().map((todoList) => todoList.listName);
+  }
+
   getNumberOfTodoLists() {
     return this.#todoLists.length;
   }

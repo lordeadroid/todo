@@ -61,10 +61,18 @@ const toggleTodoStatus = (req, res) => {
   res.status(204).end();
 };
 
+const getListsName = (req, res) => {
+  const todoLists = req.app.todoLists;
+  const listsName = todoLists.getListsName();
+
+  res.json(listsName);
+};
+
 module.exports = {
   sendTodos,
   addTodoList,
   addTodo,
   deleteTodo,
   toggleTodoStatus,
+  getListsName,
 };
