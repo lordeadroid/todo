@@ -12,6 +12,12 @@ class TodoAdmin {
     };
   }
 
+  async getListsName() {
+    const response = await fetch("/lists-name");
+    const listsName = await response.json();
+    return listsName;
+  }
+
   getAllTodos(init) {
     fetch("/todo-lists")
       .then((res) => res.json())

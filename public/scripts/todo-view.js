@@ -179,6 +179,17 @@ class TodoView {
     });
   }
 
+  renderSidePanel(listsName) {
+    const listsContainer = document.getElementById("lists-container");
+    listsContainer.replaceChildren();
+
+    listsName.forEach((listName) => {
+      const div = document.createElement("div");
+      div.innerText = listName;
+      listsContainer.appendChild(div);
+    });
+  }
+
   setupAddTodoList(createTodoList) {
     this.#addListButton.onclick = () => {
       const listName = this.#addListBox.value;

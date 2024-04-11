@@ -14,8 +14,13 @@ class TodoController {
     this.#todoView.renderLists(todoListsDetails);
   }
 
+  async #displaySidePanel() {
+    const listsName = await this.#todoAdmin.getListsName();
+    this.#todoView.renderSidePanel(listsName);
+  }
+
   start() {
-    this.#todoView.setupHideAddList(); 
+    this.#todoView.setupHideAddList();
 
     this.#todoView.setupAddTodoList((listName) => {
       this.#todoAdmin.addTodoList(listName, () => this.#displayTodos());
@@ -46,5 +51,6 @@ class TodoController {
     });
 
     this.#displayTodos();
+    this.#displaySidePanel();
   }
 }
