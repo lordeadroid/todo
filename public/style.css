@@ -47,11 +47,6 @@ body {
   padding: 40px;
 }
 
-#add-list-box,
-#add-list-button {
-  display: none;
-}
-
 .add-list {
   width: 30%;
 }
@@ -68,9 +63,6 @@ body {
 }
 
 .show-add-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   color: white;
   background-color: #806bb4;
   width: 1.25em;
@@ -78,6 +70,28 @@ body {
   border-radius: 12px;
 }
 
-.show-add-list:hover {
+.add-tasks {
+  font-size: 22px;
+  position: absolute;
+  top: 790px;
+  left: 1325px;
+  height: 50px;
+  width: 150px;
+  color: white;
+  background-color: #7102b7;
+  border-radius: 25px;
+}
+
+.hover-pointer {
   cursor: pointer;
+}
+
+.text-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
 }
