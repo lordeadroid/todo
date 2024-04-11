@@ -15,6 +15,8 @@ class TodoController {
   }
 
   start() {
+    this.#todoView.setupHideAddList(); 
+
     this.#todoView.setupAddTodoList((listName) => {
       this.#todoAdmin.addTodoList(listName, () => this.#displayTodos());
     });

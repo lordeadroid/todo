@@ -18,13 +18,6 @@ class TodoView {
     this.#showAddList = showAddList;
   }
 
-  #showAddListDiv() {
-    this.#showAddList.addEventListener("click", () => {
-      this.#addListBox.classList.toggle("hidden");
-      this.#addListButton.classList.toggle("hidden");
-    });
-  }
-
   #appendElements(container, elements) {
     elements.forEach((element) => {
       container.appendChild(element);
@@ -184,8 +177,6 @@ class TodoView {
     todoLists.forEach((todoList) => {
       this.#renderList(todoList);
     });
-
-    this.#showAddListDiv();
   }
 
   setupAddTodoList(createTodoList) {
@@ -217,5 +208,12 @@ class TodoView {
 
   setupSortByGroup(sortByGroup) {
     this.#sortByGroup = sortByGroup;
+  }
+
+  setupHideAddList() {
+    this.#showAddList.addEventListener("click", () => {
+      this.#addListBox.classList.toggle("hidden");
+      this.#addListButton.classList.toggle("hidden");
+    });
   }
 }
