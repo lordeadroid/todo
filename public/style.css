@@ -73,8 +73,8 @@ body {
 .add-tasks {
   font-size: 22px;
   position: absolute;
-  top: 790px;
-  left: 1325px;
+  top: 785px;
+  left: 1315px;
   height: 50px;
   width: 150px;
   color: white;
@@ -94,4 +94,21 @@ body {
 
 .hidden {
   display: none;
+}
+
+.task-input {
+  appearance: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  position: absolute;
+  top: 785px;
+  left: 800px;
+  height: 50px;
+  width: 625px;
+  font-size: 22px;
+  padding-left: 20px;
+  color: black;
+  background-color: white;
+  border-radius: 25px;
 }

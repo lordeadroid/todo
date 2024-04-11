@@ -112,7 +112,13 @@ class TodoView {
 
   #createAddTaskButton(listId) {
     const addButtonElement = document.createElement("div");
+    addButtonElement.addEventListener("click", () => {
+      document.getElementById(`${listId}-input`).classList.toggle("task-input");
+      document.getElementById(`${listId}-input`).classList.toggle("hidden");
+    });
+
     addButtonElement.innerText = "Add Tasks";
+
     const attributes = {
       id: `${listId}-add`,
       class: "add-tasks hover-pointer text-center",
@@ -126,7 +132,8 @@ class TodoView {
     const taskBox = document.createElement("input");
     const attributes = {
       type: "text",
-      class: listId,
+      id: `${listId}-input`,
+      class: "hidden",
       placeholder: "Add new task",
     };
 
@@ -135,7 +142,7 @@ class TodoView {
   }
 
   #createListNameElement(listName) {
-    const listNameElement = document.createElement("h2");
+    const listNameElement = document.createElement("div");
     listNameElement.innerText = listName;
 
     return listNameElement;
