@@ -5,6 +5,7 @@
 }
 
 body {
+  background-color: #19191c;
   font-size: 2em;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -17,6 +18,35 @@ body {
 #page {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  margin: auto;
+  width: 60%;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 2em;
+  color: #efefef;
+  padding: 50px 0px;
+}
+
+.todo-container {
+  display: flex;
+  color: #efefef;
+  gap: 3%;
+}
+
+.add-list,
+#todo-list {
+  background-color: #1f1e22;
+  height: 700px;
+  border-radius: 40px;
+  padding: 40 px;
+}
+
+.add-list {
+  width: 30%;
+}
+
+#todo-list {
+  width: 65%;
 }
