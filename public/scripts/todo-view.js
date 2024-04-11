@@ -20,10 +20,8 @@ class TodoView {
 
   #showAddListDiv() {
     this.#showAddList.addEventListener("click", () => {
-      const style =
-        this.#addListBox.style.display === "block" ? "none" : "block";
-      this.#addListBox.style.display = style;
-      this.#addListButton.style.display = style;
+      this.#addListBox.classList.toggle("hidden");
+      this.#addListButton.classList.toggle("hidden");
     });
   }
 
@@ -113,12 +111,11 @@ class TodoView {
   }
 
   #createAddTaskButton(listId) {
-    const addButtonElement = document.createElement("input");
+    const addButtonElement = document.createElement("div");
+    addButtonElement.innerText = "Add Tasks";
     const attributes = {
-      value: "Add",
       id: `${listId}-add`,
-      type: "button",
-      class: "buttons",
+      class: "add-tasks hover-pointer text-center",
     };
 
     this.#addAttributes(addButtonElement, attributes);
