@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 const createTodo = ({ id, description, isDone }) => {
   const todo = new Todo(description, id);
 
@@ -18,6 +16,7 @@ const createTodoList = ({ listName, listId, todos: todosDetails }) => {
   return todoList;
 };
 
+// eslint-disable-next-line no-unused-vars
 const createTodoLists = (todoListsDetails, todoLists) => {
   todoListsDetails.forEach((todoListDetails) => {
     const todoList = createTodoList(todoListDetails);
