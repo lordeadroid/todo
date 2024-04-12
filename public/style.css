@@ -67,6 +67,26 @@ body {
   font-weight: 500;
 }
 
+#lists-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+#lists-container > div {
+  font-size: 20px;
+  border-radius: 5px;
+  height: 40px;
+  width: 100%;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  margin: 5px 0px;
+  color: #867e9d;
+}
+
 .show-add-list {
   color: white;
   background-color: #806bb4;
