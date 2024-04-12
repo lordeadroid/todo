@@ -23,18 +23,22 @@ class TodoController {
     this.#todoView.setupHideAddList();
 
     this.#todoView.setupAddTodoList((listName) => {
-      this.#todoAdmin.addTodoList(listName, () => this.#displayTodos());
+      this.#todoAdmin.addTodoList(
+        listName,
+        () => this.#displayTodos(),
+        () => this.#displaySidePanel(),
+      );
     });
 
     this.#todoView.setupAddTodo((todoDescription, listId) => {
       this.#todoAdmin.addTodo(todoDescription, listId, () =>
-        this.#displayTodos()
+        this.#displayTodos(),
       );
     });
 
     this.#todoView.setupToggleListener((listId, todoId) => {
       this.#todoAdmin.toggleTodoStatus(listId, todoId, () =>
-        this.#displayTodos()
+        this.#displayTodos(),
       );
     });
 

@@ -26,7 +26,7 @@ class TodoAdmin {
       });
   }
 
-  addTodoList(listName, displayTodo) {
+  addTodoList(listName, displayTodo, displaySidePanel) {
     fetch("/todo-lists", {
       method: "POST",
       body: JSON.stringify({ listName }),
@@ -39,6 +39,7 @@ class TodoAdmin {
         const todoList = new TodoList(listName, listId);
         this.#todoLists.addTodoList(todoList);
         displayTodo();
+        displaySidePanel();
       });
   }
 
