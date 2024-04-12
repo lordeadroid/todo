@@ -2,6 +2,7 @@ const fs = require("fs");
 const { TodoLists } = require("./src/models/todo-lists");
 const { createTodoLists } = require("./src/models/parser.js");
 const { createApp } = require("./src/app.js");
+const { ServerCommandHandler } = require("./src/utils/process-readstream.js");
 
 const setupServer = (todoLists) => {
   const app = createApp(todoLists);
@@ -11,6 +12,9 @@ const setupServer = (todoLists) => {
     const time = new Date().toTimeString();
     // eslint-disable-next-line no-console
     console.log("Listening on PORT:", PORT, time);
+
+    const serverCommandHandler = new ServerCommandHandler(PORT);
+    serverCommandHandler.start();
   });
 };
 
