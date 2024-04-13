@@ -9,9 +9,9 @@
   "scripts": {
     "coverage": "npx nyc node --test",
     "lint": "eslint .",
-    "dev": "node --watch main.js",
-    "start": "node main.js",
-    "server": "node --watch main.js",
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "server": "node --watch server.js",
     "test": "node --test"
   },
   "keywords": [],
