@@ -1,33 +1,12 @@
-<!-- make todo
-<!-- make todoList -->
+# TODO
 
-<!-- todo list (section)
+## Frontend
 
-create new task (div) w
+---
 
-    box for entering task (input) d
-    button for adding task (input) d
-    button for sorting task (input) d
-    button for moving completing task to bottom (input) d
+## Backend
 
-alltasks (div)
+### Refactor
 
-make an entity that will handle with database
-on adding a list save the new list on the database -->
-
-# STORY BOARD
-
-- Migration
-
-  - delete api
-  - toggle todo endpoint
-
-- Styling (outsource from raj)
-
-  - change structure
-  - add css
-
-- Change server from http to express
-  Todo => Task
-  TodoList => Todo
-  TodoLists => TodoList
+- [ ] convert the project to module
+- [ ] change callbacks to async-await
