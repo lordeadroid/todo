@@ -20,7 +20,7 @@ const setupServer = (todoLists) => {
 
 const main = async () => {
   const path = `${process.env.PWD}/database.json`;
-  const data = (await readFile(path)) || "[]";
+  const data = await readFile(path);
   const todoListsDetails = JSON.parse(data);
   const todoLists = new TodoLists();
 
