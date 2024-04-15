@@ -23,8 +23,9 @@ class ServerCommandHandler {
   }
 
   #handleWrongCommand(command) {
+    this.#clearScreen();
     console.log(`${command} is not a valid command\n`);
-    console.log("Follow the instructions below\n");
+    console.log("Follow the instructions below:\n");
     this.#printInstructions();
   }
 
@@ -53,12 +54,13 @@ class ServerCommandHandler {
   }
 
   #printInstructions() {
-    this.#clearScreen();
-    console.log("Press o to open in browser");
-    console.log("Press q to stop\n");
+    console.log("Press o to open in browser.");
+    console.log("Press q to stop server.");
+    console.log();
   }
 
   start() {
+    this.#clearScreen();
     this.#printInstructions();
     this.#readStream();
   }
