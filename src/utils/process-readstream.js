@@ -18,6 +18,9 @@ class ServerCommandHandler {
       yellow: function (char) {
         return `\x1b[33m${char}\x1b[0m`;
       },
+      blue: function (char) {
+        return `\x1b[34m${char}\x1b[0m`;
+      },
     };
   }
 
@@ -49,6 +52,8 @@ class ServerCommandHandler {
         return this.#openBrowser();
       case "q":
         return this.#close();
+      case "c":
+        return this.#clearScreen();
       default:
         this.#handleWrongCommand(command);
     }
@@ -68,6 +73,7 @@ class ServerCommandHandler {
   #printInstructions() {
     console.log(`Press ${this.#colors.green("o")} to open in browser.`);
     console.log(`Press ${this.#colors.red("q")} to stop server.`);
+    console.log(`Press ${this.#colors.blue("c")} to clear screen.`);
     console.log();
   }
 
