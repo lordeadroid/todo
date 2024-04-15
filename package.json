@@ -6,6 +6,7 @@
   "engines": {
     "node": "20.x"
   },
+  "type": "module",
   "scripts": {
     "coverage": "npx nyc node --test",
     "lint": "eslint .",

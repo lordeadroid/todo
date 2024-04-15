@@ -1,8 +1,8 @@
-const { createApp } = require("./src/app.js");
-const { readFile } = require("./src/utils/read-file.js");
-const { createTodoLists } = require("./src/models/parser.js");
-const { TodoLists } = require("./src/models/todo-lists");
-const { ServerCommandHandler } = require("./src/utils/process-readstream.js");
+import createApp from "./src/app.js";
+import readFile from "./src/utils/read-file.js";
+import createTodoLists from "./src/models/parser.js";
+import TodoLists from "./src/models/todo-lists.js";
+import ServerCommandHandler from "./src/utils/process-readstream.js";
 
 const setupServer = (todoLists) => {
   const app = createApp(todoLists);

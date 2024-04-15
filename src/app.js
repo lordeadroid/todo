@@ -1,13 +1,13 @@
-const express = require("express");
-const { logRequest } = require("./middlewares/logger");
-const {
+import express from "express";
+import logRequest from "./middlewares/logger.js";
+import {
   sendTodos,
   addTodoList,
   addTodo,
   deleteTodo,
   toggleTodoStatus,
   getListsName,
-} = require("./handlers/todo-handlers");
+} from "./handlers/todo-handlers.js";
 
 const createApp = (todoLists) => {
   const app = express();
@@ -26,4 +26,4 @@ const createApp = (todoLists) => {
   return app;
 };
 
-module.exports = { createApp };
+export default createApp;

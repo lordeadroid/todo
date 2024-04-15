@@ -1,5 +1,5 @@
-const { Todo } = require('./todo');
-const { TodoList } = require('./todo-list');
+import Todo from "./todo.js";
+import TodoList from "./todo-list.js";
 
 const createTodo = ({ id, description, isDone }) => {
   const todo = new Todo(description, id);
@@ -26,4 +26,4 @@ const createTodoLists = (todoListsDetails, todoLists) => {
   });
 };
 
-module.exports = { createTodoLists };
+export default createTodoLists;

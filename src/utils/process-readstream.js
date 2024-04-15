@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-const { exec } = require("child_process");
+import { exec } from "child_process";
 
 class ServerCommandHandler {
   #localhost;
@@ -51,4 +51,4 @@ class ServerCommandHandler {
   }
 }
 
-module.exports = { ServerCommandHandler };
+export default ServerCommandHandler;

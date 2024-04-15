@@ -1,6 +1,6 @@
-const { Todo } = require("../../src/models/todo");
-const { TodoList } = require("../../src/models/todo-list");
-const { TodoLists } = require("../../src/models/todo-lists");
+import Todo from "../../src/models/todo.js";
+import TodoList from "../../src/models/todo-list.js";
+import TodoLists from "../../src/models/todo-lists.js";
 
 const getTodoListsWithTodo = () => {
   const listId = 0;
@@ -24,4 +24,4 @@ const getTodoLists = () => {
   return todoLists;
 };
 
-module.exports = { getTodoLists, getTodoListsWithTodo };
+export { getTodoLists, getTodoListsWithTodo };

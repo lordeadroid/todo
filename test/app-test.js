@@ -1,11 +1,11 @@
-const request = require("supertest");
-const { describe, it } = require("node:test");
-const { createApp } = require("../src/app");
-const { TodoLists } = require("../src/models/todo-lists");
-const {
+import request from "supertest";
+import { describe, it } from "node:test";
+import createApp from "../src/app.js";
+import TodoLists from "../src/models/todo-lists.js";
+import {
   getTodoLists,
   getTodoListsWithTodo,
-} = require("./test-data/todo-list-data");
+} from "./test-data/todo-list-data.js";
 
 describe("APP", () => {
   describe("GET /todo-lists", () => {

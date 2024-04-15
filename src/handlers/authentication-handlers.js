@@ -6,4 +6,4 @@ const handleAuthentication = (request, response) => {
   response.end(JSON.stringify(details));
 };
 
-module.exports = { handleAuthentication };
+export default handleAuthentication;
