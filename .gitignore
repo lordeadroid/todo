@@ -1,6 +1,6 @@
-.DS_Store
-node_modules
-database.json
-DRAFT.md
-coverage
+node_modules/
+coverage/
+
+.env
 .nyc_output
+database.json
