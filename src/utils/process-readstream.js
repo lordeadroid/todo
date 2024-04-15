@@ -4,9 +4,19 @@ import { exec } from "child_process";
 
 class ServerCommandHandler {
   #localhost;
+  #colors;
 
   constructor(PORT) {
     this.#localhost = `http://localhost:${PORT}`;
+    this.#colors = {
+      end: "\x1b[0m",
+      green: function (char) {
+        return `\x1b[32m${char}${this.end}`;
+      },
+      red: function (char) {
+        return `\x1b[31m${char}${this.end}`;
+      },
+    };
   }
 
   #clearScreen() {
@@ -54,8 +64,8 @@ class ServerCommandHandler {
   }
 
   #printInstructions() {
-    console.log("Press o to open in browser.");
-    console.log("Press q to stop server.");
+    console.log(`Press ${this.#colors.green("o")} to open in browser.`);
+    console.log(`Press ${this.#colors.red("q")} to stop server.`);
     console.log();
   }
 
