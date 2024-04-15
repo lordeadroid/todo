@@ -1,7 +1,7 @@
-const fs = require("fs");
-const { TodoLists } = require("./src/models/todo-lists");
-const { createTodoLists } = require("./src/models/parser.js");
 const { createApp } = require("./src/app.js");
+const { readFile } = require("./src/utils/read-file.js");
+const { createTodoLists } = require("./src/models/parser.js");
+const { TodoLists } = require("./src/models/todo-lists");
 const { ServerCommandHandler } = require("./src/utils/process-readstream.js");
 
 const setupServer = (todoLists) => {
@@ -18,15 +18,14 @@ const setupServer = (todoLists) => {
   });
 };
 
-const main = () => {
+const main = async () => {
   const path = `${process.env.PWD}/database.json`;
+  const data = (await readFile(path)) || "[]";
+  const todoListsDetails = JSON.parse(data);
   const todoLists = new TodoLists();
 
-  fs.readFile(path, "utf-8", (_, content = "[]") => {
-    const todoListsDetails = JSON.parse(content);
-    createTodoLists(todoListsDetails, todoLists);
-    setupServer(todoLists);
-  });
+  createTodoLists(todoListsDetails, todoLists);
+  setupServer(todoLists);
 };
 
 main();
