@@ -12,6 +12,9 @@ check() {
   fi
 }
 
+git push
+check "updates avaiable"
+
 npm run test
 check "tests failed"
 
