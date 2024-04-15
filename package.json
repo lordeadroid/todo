@@ -12,6 +12,7 @@
     "dev": "node --watch server.js",
     "start": "node server.js",
     "server": "node --watch server.js",
+    "setup": "sh ./bin/setup.sh",
     "test": "node --test"
   },
   "keywords": [],
