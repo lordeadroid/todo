@@ -2,6 +2,6 @@
 
 cp .git-hooks/pre-commit .git/hooks
 
-npm install
+npm clean-install
 npm run test
 npm run coverage
