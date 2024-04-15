@@ -18,6 +18,10 @@ class ServerCommandHandler {
     this.#clearScreen();
   }
 
+  #close() {
+    exec('pkill -f "node --watch"');
+  }
+
   #handleWrongCommand(command) {
     console.log(`${command} is not a valid command\n`);
     console.log("Follow the instructions below\n");
@@ -30,6 +34,8 @@ class ServerCommandHandler {
     switch (command) {
       case "o":
         return this.#openBrowser();
+      case "q":
+        return this.#close();
       default:
         this.#handleWrongCommand(command);
     }
@@ -49,6 +55,7 @@ class ServerCommandHandler {
   #printInstructions() {
     this.#clearScreen();
     console.log("Press o to open in browser");
+    console.log("Press q to stop\n");
   }
 
   start() {
