@@ -1,3 +1,4 @@
+import "dotenv/config";
 import createApp from "./src/app.js";
 import readFile from "./src/utils/read-file.js";
 import createTodoLists from "./src/models/parser.js";
@@ -13,8 +14,10 @@ const setupServer = (todoLists) => {
     // eslint-disable-next-line no-console
     console.log("Listening on PORT:", PORT, time);
 
-    const serverCommandHandler = new ServerCommandHandler(PORT);
-    serverCommandHandler.start();
+    if (process.env.RUNTIME === "DEV") {
+      const serverCommandHandler = new ServerCommandHandler(PORT);
+      serverCommandHandler.start();
+    }
   });
 };
 
