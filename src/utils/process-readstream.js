@@ -9,12 +9,14 @@ class ServerCommandHandler {
   constructor(PORT) {
     this.#localhost = `http://localhost:${PORT}`;
     this.#colors = {
-      end: "\x1b[0m",
-      green: function (char) {
-        return `\x1b[32m${char}${this.end}`;
-      },
       red: function (char) {
-        return `\x1b[31m${char}${this.end}`;
+        return `\x1b[31m${char}\x1b[0m`;
+      },
+      green: function (char) {
+        return `\x1b[32m${char}\x1b[0m`;
+      },
+      yellow: function (char) {
+        return `\x1b[33m${char}\x1b[0m`;
       },
     };
   }
@@ -34,7 +36,7 @@ class ServerCommandHandler {
 
   #handleWrongCommand(command) {
     this.#clearScreen();
-    console.log(`${command} is not a valid command\n`);
+    console.log(`${this.#colors.yellow(command)} is not a valid command\n`);
     console.log("Follow the instructions below:\n");
     this.#printInstructions();
   }
