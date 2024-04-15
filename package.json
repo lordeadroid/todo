@@ -8,7 +8,7 @@
   },
   "type": "module",
   "scripts": {
-    "coverage": "npx nyc node --test",
+    "coverage": "npx c8 npm test",
     "lint": "eslint .",
     "dev": "node --watch server.js",
     "start": "node server.js",
@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "c8": "^9.1.0",
     "eslint": "^8.57.0",
     "supertest": "^6.3.4"
   },
