@@ -9,8 +9,13 @@ class ServerCommandHandler {
     this.#localhost = `http://localhost:${PORT}`;
   }
 
+  #clearScreen() {
+    console.clear();
+  }
+
   #openBrowser() {
     exec(`open ${this.#localhost}`);
+    this.#clearScreen();
   }
 
   #handleWrongCommand(command) {
@@ -42,6 +47,7 @@ class ServerCommandHandler {
   }
 
   #printInstructions() {
+    this.#clearScreen();
     console.log("Press o to open in browser");
   }
 
