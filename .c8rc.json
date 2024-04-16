@@ -6,8 +6,9 @@
   "exclude": [
     "test/",
     "coverage/",
-    ".eslintrc.js",
-    "server.js",
-    "public/scripts/main.js"
+    "*.config.js",
+    "*.json",
+    "public/*",
+    "server.js"
   ]
 }
